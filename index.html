@@ -4,47 +4,844 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Melodii personalizate create din povestea ta — un cadou unic pentru aniversări, cupluri și oameni dragi." />
+  <meta name="order-email" content="comenzi@povesteapenote.ro" />
   <title>Poveste pe Note — Melodii personalizate</title>
   <style>
-    :root{--ink:#35262d;--muted:#75656c;--cream:#fffaf7;--paper:#fff;--rose:#c94f6d;--rose2:#e87e95;--blush:#f9e4e7;--gold:#b88952;--line:#eddde0;--shadow:0 18px 60px rgba(89,48,62,.12)}
-    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ink);background:var(--cream);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.6}button,input,textarea,select{font:inherit}a{color:inherit;text-decoration:none}.wrap{width:min(1120px,calc(100% - 40px));margin:auto}.serif{font-family:Georgia,"Times New Roman",serif}
-    nav{height:76px;display:flex;align-items:center;justify-content:space-between}.brand{font:700 22px Georgia,serif;letter-spacing:-.4px}.brand i{color:var(--rose);font-style:normal}.navlinks{display:flex;align-items:center;gap:28px;font-size:14px}.navlinks a:hover{color:var(--rose)}.btn{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:999px;padding:13px 22px;font-weight:700;cursor:pointer;transition:.2s}.btn:hover{transform:translateY(-2px)}.primary{color:#fff;background:linear-gradient(135deg,var(--rose),var(--rose2));box-shadow:0 10px 28px rgba(201,79,109,.25)}.secondary{background:#fff;border:1px solid var(--line)}
-    .hero{min-height:680px;display:grid;grid-template-columns:1.08fr .92fr;align-items:center;gap:60px;padding:64px 0 90px}.eyebrow{display:inline-flex;gap:8px;align-items:center;padding:7px 12px;background:var(--blush);color:#984158;border-radius:99px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}.hero h1{font-size:clamp(46px,6.2vw,78px);line-height:1.02;letter-spacing:-3px;margin:22px 0}.hero h1 em{color:var(--rose);font-weight:400}.hero p{font-size:18px;color:var(--muted);max-width:590px}.actions{display:flex;gap:12px;margin-top:30px;flex-wrap:wrap}.micro{font-size:12px;color:var(--muted);margin-top:16px}.record-card{position:relative;background:linear-gradient(145deg,#5a3342,#2f2026);border-radius:32px;padding:32px;min-height:470px;box-shadow:var(--shadow);overflow:hidden;color:#fff}.record-card:before{content:"";position:absolute;width:360px;height:360px;border-radius:50%;background:repeating-radial-gradient(circle,#191317 0 4px,#35272d 5px 9px);right:-80px;top:55px;box-shadow:inset 0 0 0 5px #171014}.record-card:after{content:"♪";position:absolute;display:grid;place-items:center;width:108px;height:108px;border-radius:50%;background:var(--rose);right:46px;top:181px;font-size:42px;z-index:2}.cover-copy{position:relative;z-index:3;width:54%}.cover-copy small{color:#f2bbc7;text-transform:uppercase;letter-spacing:.14em}.cover-copy h2{font:400 42px/1.08 Georgia,serif;margin:15px 0}.cover-copy p{font-size:13px;color:#e8d8dd}.wave{position:absolute;left:32px;bottom:35px;display:flex;align-items:center;gap:4px;height:55px}.wave i{display:block;width:3px;border-radius:5px;background:#f4b1c0;animation:pulse 1.2s ease-in-out infinite}.wave i:nth-child(1){height:14px}.wave i:nth-child(2){height:30px}.wave i:nth-child(3){height:45px}.wave i:nth-child(4){height:23px}.wave i:nth-child(5){height:52px}.wave i:nth-child(6){height:34px}.wave i:nth-child(7){height:18px}@keyframes pulse{50%{transform:scaleY(.55)}}
-    section{padding:95px 0}.section-head{text-align:center;max-width:680px;margin:0 auto 50px}.section-head span{color:var(--rose);font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}.section-head h2{font:400 clamp(36px,4.5vw,54px)/1.1 Georgia,serif;margin:12px 0}.section-head p{color:var(--muted)}.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}.step,.price{background:#fff;border:1px solid var(--line);border-radius:24px;padding:30px}.num{width:42px;height:42px;border-radius:50%;background:var(--blush);color:var(--rose);display:grid;place-items:center;font-weight:800}.step h3{font:400 24px Georgia,serif;margin:20px 0 8px}.step p{color:var(--muted);font-size:14px;margin:0}
-    .samples{background:#3d2931;color:#fff}.samples .section-head p{color:#d8c5cc}.sample-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.sample{min-height:260px;border:1px solid rgba(255,255,255,.13);border-radius:24px;padding:26px;display:flex;flex-direction:column;justify-content:flex-end;background:radial-gradient(circle at 80% 15%,rgba(232,126,149,.3),transparent 42%),#49323b}.sample .tag{align-self:flex-start;margin-bottom:auto;background:rgba(255,255,255,.12);padding:5px 10px;border-radius:20px;font-size:11px}.play{width:46px;height:46px;border-radius:50%;border:0;background:var(--rose);color:#fff;cursor:pointer;margin-bottom:16px}.sample h3{font:400 23px Georgia,serif;margin:0}.sample p{font-size:13px;color:#d9c8cf;margin:5px 0 0}
-    .prices{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;align-items:stretch}.price{position:relative;display:flex;flex-direction:column}.price.popular{border:2px solid var(--rose);transform:translateY(-10px);box-shadow:var(--shadow)}.ribbon{position:absolute;right:20px;top:18px;background:var(--rose);color:white;border-radius:20px;padding:5px 10px;font-size:10px;font-weight:800;text-transform:uppercase}.price h3{font:400 27px Georgia,serif;margin:4px 0}.amount{font-size:42px;font-weight:800;letter-spacing:-2px}.amount small{font-size:14px;font-weight:500;color:var(--muted)}.price ul{padding:0;list-style:none;color:var(--muted);font-size:14px;flex:1}.price li{padding:8px 0;border-bottom:1px solid #f3e9eb}.price li:before{content:"✓";color:var(--rose);font-weight:800;margin-right:9px}
-    .order{background:linear-gradient(180deg,#fff5f5,var(--cream))}.form-shell{display:grid;grid-template-columns:.75fr 1.25fr;background:#fff;border:1px solid var(--line);border-radius:30px;overflow:hidden;box-shadow:var(--shadow)}.form-side{background:#462f38;color:#fff;padding:44px}.form-side h3{font:400 36px Georgia,serif;margin:0 0 18px}.form-side p{color:#dac8ce;font-size:14px}.form-side .promise{margin-top:38px;display:grid;gap:17px}.promise div{display:flex;gap:12px;font-size:13px}.promise b{color:#f5b0bf}.form{padding:44px}.fields{display:grid;grid-template-columns:1fr 1fr;gap:17px}.field{display:grid;gap:7px}.field.full{grid-column:1/-1}.field label{font-size:12px;font-weight:800}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);background:#fffcfb;border-radius:12px;padding:12px 14px;outline:0;color:var(--ink)}.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--rose);box-shadow:0 0 0 3px var(--blush)}textarea{min-height:115px;resize:vertical}.checks{font-size:12px;color:var(--muted);margin:18px 0}.checks label{display:flex;gap:9px;margin:9px 0}.form .btn{width:100%}.notice{font-size:11px;color:var(--muted);text-align:center;margin-top:12px}.success{display:none;background:#eef9f1;color:#2d6f3f;padding:14px;border-radius:12px;margin-bottom:16px;font-size:13px}
-    footer{padding:42px 0;border-top:1px solid var(--line)}.foot{display:flex;justify-content:space-between;gap:20px;color:var(--muted);font-size:12px}.foot strong{color:var(--ink)}
-    @media(max-width:850px){.navlinks a:not(.btn){display:none}.hero{grid-template-columns:1fr;padding-top:35px}.hero h1{letter-spacing:-2px}.record-card{min-height:410px}.steps,.sample-grid,.prices{grid-template-columns:1fr}.price.popular{transform:none}.form-shell{grid-template-columns:1fr}.fields{grid-template-columns:1fr}.field.full{grid-column:auto}}@media(max-width:520px){.wrap{width:min(100% - 24px,1120px)}nav{height:65px}.hero{gap:30px;padding-bottom:65px}.hero h1{font-size:44px}.record-card{min-height:360px;padding:24px}.record-card:before{right:-160px}.record-card:after{right:-1px}.cover-copy{width:72%}.form,.form-side{padding:26px}.foot{flex-direction:column}}
+    :root {
+      --ink: #35262d;
+      --muted: #75656c;
+      --cream: #fffaf7;
+      --paper: #fff;
+      --rose: #c94f6d;
+      --rose2: #e87e95;
+      --blush: #f9e4e7;
+      --gold: #b88952;
+      --line: #eddde0;
+      --shadow: 0 18px 60px rgba(89, 48, 62, .12);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--cream);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+    button, input, textarea, select { font: inherit; }
+    a { color: inherit; text-decoration: none; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    :focus-visible { outline: 3px solid var(--rose); outline-offset: 3px; }
+    [hidden] { display: none !important; }
+    .wrap { width: min(1120px, calc(100% - 40px)); margin: auto; }
+    .serif { font-family: Georgia, "Times New Roman", serif; }
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+    }
+
+    nav { height: 76px; display: flex; align-items: center; justify-content: space-between; }
+    .brand { font: 700 22px Georgia, serif; letter-spacing: -.4px; }
+    .brand i { color: var(--rose); font-style: normal; }
+    .navlinks { display: flex; align-items: center; gap: 28px; font-size: 14px; }
+    .navlinks a:hover, .foot a:hover, .contact-link:hover { color: var(--rose); }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      border: 0; border-radius: 999px; padding: 13px 22px; font-weight: 700;
+      cursor: pointer; transition: transform .2s, box-shadow .2s, background .2s;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .primary { color: #fff; background: linear-gradient(135deg, var(--rose), var(--rose2)); box-shadow: 0 10px 28px rgba(201, 79, 109, .25); }
+    .secondary { color: var(--ink); background: #fff; border: 1px solid var(--line); }
+    .btn:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+
+    .hero {
+      min-height: 680px; display: grid; grid-template-columns: 1.08fr .92fr;
+      align-items: center; gap: 60px; padding: 64px 0 90px;
+    }
+    .eyebrow {
+      display: inline-flex; gap: 8px; align-items: center; padding: 7px 12px;
+      background: var(--blush); color: #984158; border-radius: 99px;
+      font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+    }
+    .hero h1 { font-size: clamp(46px, 6.2vw, 78px); line-height: 1.02; letter-spacing: -3px; margin: 22px 0; }
+    .hero h1 em { color: var(--rose); font-weight: 400; }
+    .hero p { font-size: 18px; color: var(--muted); max-width: 590px; }
+    .actions { display: flex; gap: 12px; margin-top: 30px; flex-wrap: wrap; }
+    .micro { font-size: 12px; color: var(--muted); margin-top: 16px; }
+    .record-card {
+      position: relative; background: linear-gradient(145deg, #5a3342, #2f2026);
+      border-radius: 32px; padding: 32px; min-height: 470px;
+      box-shadow: var(--shadow); overflow: hidden; color: #fff;
+    }
+    .record-card::before {
+      content: ""; position: absolute; width: 360px; height: 360px; border-radius: 50%;
+      background: repeating-radial-gradient(circle, #191317 0 4px, #35272d 5px 9px);
+      right: -80px; top: 55px; box-shadow: inset 0 0 0 5px #171014;
+    }
+    .record-card::after {
+      content: "♪"; position: absolute; display: grid; place-items: center;
+      width: 108px; height: 108px; border-radius: 50%; background: var(--rose);
+      right: 46px; top: 181px; font-size: 42px; z-index: 2;
+    }
+    .cover-copy { position: relative; z-index: 3; width: 54%; }
+    .cover-copy small { color: #f2bbc7; text-transform: uppercase; letter-spacing: .14em; }
+    .cover-copy h2 { font: 400 42px/1.08 Georgia, serif; margin: 15px 0; }
+    .cover-copy p { font-size: 13px; color: #e8d8dd; }
+    .wave { position: absolute; left: 32px; bottom: 35px; display: flex; align-items: center; gap: 4px; height: 55px; }
+    .wave i { display: block; width: 3px; border-radius: 5px; background: #f4b1c0; animation: pulse 1.2s ease-in-out infinite; }
+    .wave i:nth-child(1) { height: 14px; }
+    .wave i:nth-child(2) { height: 30px; }
+    .wave i:nth-child(3) { height: 45px; }
+    .wave i:nth-child(4) { height: 23px; }
+    .wave i:nth-child(5) { height: 52px; }
+    .wave i:nth-child(6) { height: 34px; }
+    .wave i:nth-child(7) { height: 18px; }
+    @keyframes pulse { 50% { transform: scaleY(.55); } }
+
+    section { padding: 95px 0; }
+    .section-head { text-align: center; max-width: 680px; margin: 0 auto 50px; }
+    .section-head > span { color: var(--rose); font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .section-head h2 { font: 400 clamp(36px, 4.5vw, 54px)/1.1 Georgia, serif; margin: 12px 0; }
+    .section-head p { color: var(--muted); }
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+    .step, .price { background: #fff; border: 1px solid var(--line); border-radius: 24px; padding: 30px; }
+    .num { width: 42px; height: 42px; border-radius: 50%; background: var(--blush); color: var(--rose); display: grid; place-items: center; font-weight: 800; }
+    .step h3 { font: 400 24px Georgia, serif; margin: 20px 0 8px; }
+    .step p { color: var(--muted); font-size: 14px; margin: 0; }
+
+    .samples { background: #3d2931; color: #fff; }
+    .samples .section-head p { color: #d8c5cc; }
+    .sample-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .sample {
+      min-height: 260px; border: 1px solid rgba(255, 255, 255, .13); border-radius: 24px;
+      padding: 26px; display: flex; flex-direction: column; justify-content: flex-end;
+      background: radial-gradient(circle at 80% 15%, rgba(232, 126, 149, .3), transparent 42%), #49323b;
+    }
+    .sample .tag { align-self: flex-start; margin-bottom: auto; background: rgba(255, 255, 255, .12); padding: 5px 10px; border-radius: 20px; font-size: 11px; }
+    .play {
+      width: 46px; height: 46px; border-radius: 50%; border: 0; background: var(--rose);
+      color: #fff; cursor: pointer; margin: 18px 0 16px; font-size: 18px;
+    }
+    .play:hover { background: var(--rose2); }
+    .play.is-playing { box-shadow: 0 0 0 7px rgba(232, 126, 149, .18); }
+    .sample h3 { font: 400 23px Georgia, serif; margin: 0; }
+    .sample p { font-size: 13px; color: #d9c8cf; margin: 5px 0 0; }
+    .sample-disclaimer { color: #e2d3d8; max-width: 760px; text-align: center; margin: -24px auto 30px; font-size: 13px; }
+
+    .prices { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; align-items: stretch; }
+    .price { position: relative; display: flex; flex-direction: column; }
+    .price.popular { border: 2px solid var(--rose); transform: translateY(-10px); box-shadow: var(--shadow); }
+    .ribbon { position: absolute; right: 20px; top: 18px; background: var(--rose); color: #fff; border-radius: 20px; padding: 5px 10px; font-size: 10px; font-weight: 800; text-transform: uppercase; }
+    .price h3 { font: 400 27px Georgia, serif; margin: 4px 0; }
+    .amount { font-size: 42px; font-weight: 800; letter-spacing: -2px; }
+    .amount small { font-size: 14px; font-weight: 500; color: var(--muted); }
+    .price ul { padding: 0; list-style: none; color: var(--muted); font-size: 14px; flex: 1; }
+    .price li { padding: 8px 0; border-bottom: 1px solid #f3e9eb; }
+    .price li::before { content: "✓"; color: var(--rose); font-weight: 800; margin-right: 9px; }
+
+    .order { background: linear-gradient(180deg, #fff5f5, var(--cream)); }
+    .form-shell { display: grid; grid-template-columns: .75fr 1.25fr; background: #fff; border: 1px solid var(--line); border-radius: 30px; overflow: hidden; box-shadow: var(--shadow); }
+    .form-side { background: #462f38; color: #fff; padding: 44px; }
+    .form-side h3 { font: 400 36px Georgia, serif; margin: 0 0 18px; }
+    .form-side p { color: #dac8ce; font-size: 14px; }
+    .form-side .promise { margin-top: 38px; display: grid; gap: 17px; }
+    .promise div { display: flex; gap: 12px; font-size: 13px; }
+    .promise b { color: #f5b0bf; }
+    .contact-line { margin-top: 28px; overflow-wrap: anywhere; }
+    .contact-link { color: #ffd8e0; text-decoration: underline; text-underline-offset: 3px; }
+    .form { padding: 44px; }
+    .fields { display: grid; grid-template-columns: 1fr 1fr; gap: 17px; }
+    .field { display: grid; gap: 7px; }
+    .field.full { grid-column: 1 / -1; }
+    .field label { font-size: 12px; font-weight: 800; }
+    .field input, .field select, .field textarea {
+      width: 100%; border: 1px solid var(--line); background: #fffcfb;
+      border-radius: 12px; padding: 12px 14px; outline: 0; color: var(--ink);
+    }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--rose); box-shadow: 0 0 0 3px var(--blush); }
+    .field textarea { min-height: 115px; resize: vertical; }
+    .checks { font-size: 12px; color: var(--muted); margin: 18px 0; }
+    .checks label { display: flex; align-items: flex-start; gap: 9px; margin: 10px 0; }
+    .checks input { flex: 0 0 auto; margin-top: 4px; accent-color: var(--rose); }
+    .form > .btn { width: 100%; }
+    .notice { font-size: 11px; color: var(--muted); text-align: center; margin-top: 12px; }
+    .success { background: #eef9f1; color: #2d6f3f; padding: 18px; border-radius: 14px; margin-bottom: 18px; font-size: 13px; }
+    .success h3 { font: 700 17px/1.3 system-ui, sans-serif; margin: 0 0 7px; }
+    .success p { margin: 7px 0; }
+    .handoff-actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 14px; }
+    .handoff-actions .btn { padding: 10px 16px; font-size: 13px; }
+    .copy-fallback { width: 100%; margin-top: 12px; min-height: 100px; border: 1px solid #b5d8bd; border-radius: 10px; padding: 10px; color: var(--ink); background: #fff; }
+    .copy-feedback { min-height: 1.4em; }
+
+    .legal { background: #fff; border-top: 1px solid var(--line); }
+    .legal + .legal { padding-top: 0; }
+    .legal .wrap { max-width: 850px; }
+    .legal h2 { font: 400 clamp(30px, 4vw, 42px)/1.15 Georgia, serif; margin: 8px 0 18px; }
+    .legal h3 { font: 400 21px Georgia, serif; margin: 24px 0 8px; }
+    .legal p, .legal li { color: var(--muted); font-size: 14px; }
+    .legal a { color: #984158; text-decoration: underline; text-underline-offset: 2px; }
+    footer { padding: 42px 0; border-top: 1px solid var(--line); }
+    .foot { display: flex; justify-content: space-between; gap: 20px; color: var(--muted); font-size: 12px; }
+    .foot strong { color: var(--ink); }
+    .foot-links { display: flex; flex-wrap: wrap; gap: 12px; }
+    .foot-links a { text-decoration: underline; text-underline-offset: 2px; }
+    .noscript { padding: 12px; background: #fff2d8; color: #533d18; text-align: center; font-size: 14px; }
+
+    @media (max-width: 850px) {
+      .navlinks { gap: 14px; }
+      .navlinks a:not(.btn) { display: none; }
+      .hero { grid-template-columns: 1fr; padding-top: 35px; }
+      .hero h1 { letter-spacing: -2px; }
+      .record-card { min-height: 410px; }
+      .steps, .sample-grid, .prices { grid-template-columns: 1fr; }
+      .price.popular { transform: none; }
+      .form-shell { grid-template-columns: 1fr; }
+      .fields { grid-template-columns: 1fr; }
+      .field.full { grid-column: auto; }
+    }
+    @media (max-width: 520px) {
+      .wrap { width: min(100% - 24px, 1120px); }
+      nav { height: 65px; }
+      .hero { gap: 30px; padding-bottom: 65px; }
+      .hero h1 { font-size: 44px; }
+      .record-card { min-height: 360px; padding: 24px; }
+      .record-card::before { right: -160px; }
+      .record-card::after { right: -1px; }
+      .cover-copy { width: 72%; }
+      .form, .form-side { padding: 26px; }
+      .foot { flex-direction: column; }
+      .handoff-actions { flex-direction: column; }
+      .handoff-actions .btn { width: 100%; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
   </style>
 </head>
 <body>
+  <noscript><div class="noscript">Pentru redarea mostrelor și pregătirea cererii, activează JavaScript în browser.</div></noscript>
   <header class="wrap">
-    <nav><a class="brand" href="#">Poveste pe <i>Note</i></a><div class="navlinks"><a href="#cum">Cum funcționează</a><a href="#exemple">Exemple</a><a href="#preturi">Prețuri</a><a class="btn primary" href="#comanda">Creează melodia</a></div></nav>
+    <nav aria-label="Navigare principală">
+      <a class="brand" href="#top">Poveste pe <i>Note</i></a>
+      <div class="navlinks">
+        <a href="#cum">Cum funcționează</a>
+        <a href="#exemple">Exemple</a>
+        <a href="#preturi">Prețuri</a>
+        <a class="btn primary" href="#comanda">Creează melodia</a>
+      </div>
+    </nav>
   </header>
 
-  <main>
-    <section class="hero wrap">
-      <div><span class="eyebrow">♫ Cadoul care se ascultă, nu se uită</span><h1 class="serif">Povestea ta merită un <em>refren.</em></h1><p>Transformăm amintirile, glumele și emoțiile tale într-o melodie personalizată, creată special pentru omul drag.</p><div class="actions"><a class="btn primary" href="#comanda">Comandă o melodie →</a><a class="btn secondary" href="#exemple">Ascultă exemple</a></div><div class="micro">♡ Creată cu grijă &nbsp; • &nbsp; Livrare digitală &nbsp; • &nbsp; O revizie inclusă</div></div>
-      <div class="record-card"><div class="cover-copy"><small>Melodie personalizată</small><h2>Doar povestea noastră</h2><p>Pentru Ana & Mihai<br/>de la primul „bună” până azi</p></div><div class="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+  <main id="top">
+    <section class="hero wrap" aria-labelledby="hero-title">
+      <div>
+        <span class="eyebrow">♫ Cadoul care se ascultă, nu se uită</span>
+        <h1 class="serif" id="hero-title">Povestea ta merită un <em>refren.</em></h1>
+        <p>Transformăm amintirile, glumele și emoțiile tale într-o melodie personalizată, creată special pentru omul drag.</p>
+        <div class="actions">
+          <a class="btn primary" href="#comanda">Comandă o melodie →</a>
+          <a class="btn secondary" href="#exemple">Ascultă exemple</a>
+        </div>
+        <div class="micro">♡ Creată cu grijă &nbsp; • &nbsp; Livrare digitală &nbsp; • &nbsp; O revizie inclusă</div>
+      </div>
+      <div class="record-card" aria-label="Copertă decorativă pentru o melodie personalizată">
+        <div class="cover-copy">
+          <small>Melodie personalizată</small>
+          <h2>Doar povestea noastră</h2>
+          <p>Pentru Ana &amp; Mihai<br />de la primul „bună” până azi</p>
+        </div>
+        <div class="wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
     </section>
 
-    <section id="cum"><div class="wrap"><div class="section-head"><span>Foarte simplu</span><h2>De la amintire la melodie</h2><p>Tu ne dai povestea. Noi o transformăm în versuri și muzică.</p></div><div class="steps"><article class="step"><div class="num">1</div><h3>Spune-ne povestea</h3><p>Completezi formularul cu nume, amintiri, ocazie și atmosfera dorită.</p></article><article class="step"><div class="num">2</div><h3>Noi creăm magia</h3><p>Scriem versurile, producem piesa cu asistență AI și selectăm cea mai bună variantă.</p></article><article class="step"><div class="num">3</div><h3>O dăruiești</h3><p>Primești melodia digital, gata să producă zâmbete, lacrimi și replay-uri.</p></article></div></div></section>
+    <section id="cum" aria-labelledby="how-title">
+      <div class="wrap">
+        <div class="section-head">
+          <span>Foarte simplu</span>
+          <h2 id="how-title">De la amintire la melodie</h2>
+          <p>Tu ne dai povestea. Noi o transformăm în versuri și muzică.</p>
+        </div>
+        <div class="steps">
+          <article class="step"><div class="num">1</div><h3>Spune-ne povestea</h3><p>Completezi formularul cu nume, amintiri, ocazie și atmosfera dorită.</p></article>
+          <article class="step"><div class="num">2</div><h3>Noi creăm magia</h3><p>Scriem versurile, producem piesa cu asistență AI și selectăm cea mai bună variantă.</p></article>
+          <article class="step"><div class="num">3</div><h3>O dăruiești</h3><p>Primești melodia digital, gata să producă zâmbete, lacrimi și replay-uri.</p></article>
+        </div>
+      </div>
+    </section>
 
-    <section class="samples" id="exemple"><div class="wrap"><div class="section-head"><span>Mostre demonstrative</span><h2>Câte povești, atâtea melodii</h2><p>Butoanele sunt pregătite pentru mostrele tale audio, când le vei avea.</p></div><div class="sample-grid"><article class="sample"><span class="tag">Romantic pop</span><button class="play" aria-label="Redă mostra" onclick="demo(this)">▶</button><h3>Locul meu e lângă tine</h3><p>Melodie pentru aniversarea unui cuplu</p></article><article class="sample"><span class="tag">Baladă emoționantă</span><button class="play" aria-label="Redă mostra" onclick="demo(this)">▶</button><h3>Mamă, primul meu acasă</h3><p>Un „mulțumesc” pus pe note</p></article><article class="sample"><span class="tag">Pop vesel</span><button class="play" aria-label="Redă mostra" onclick="demo(this)">▶</button><h3>Legenda din gașcă</h3><p>Cadou amuzant pentru cel mai bun prieten</p></article></div></div></section>
+    <section class="samples" id="exemple" aria-labelledby="samples-title">
+      <div class="wrap">
+        <div class="section-head">
+          <span>Fragmente demonstrative</span>
+          <h2 id="samples-title">Câte povești, atâtea melodii</h2>
+          <p>Apasă redare pentru a asculta câte un fragment instrumental.</p>
+        </div>
+        <p class="sample-disclaimer">Când fișierele audio reale sunt încărcate în proiect, se redau aici. Până atunci, butoanele redau fragmente sintetizate în browser, nu înregistrări ale unor melodii comandate.</p>
+        <div class="sample-grid">
+          <article class="sample">
+            <span class="tag">Romantic pop</span>
+            <button class="play" type="button" data-demo="romantic" aria-label="Redă fragmentul Romantic pop" aria-pressed="false">▶</button>
+            <h3>Locul meu e lângă tine</h3>
+            <p>Melodie pentru aniversarea unui cuplu</p>
+          </article>
+          <article class="sample">
+            <span class="tag">Baladă emoționantă</span>
+            <button class="play" type="button" data-demo="ballad" aria-label="Redă fragmentul Baladă emoționantă" aria-pressed="false">▶</button>
+            <h3>Mamă, primul meu acasă</h3>
+            <p>Un „mulțumesc” pus pe note</p>
+          </article>
+          <article class="sample">
+            <span class="tag">Pop vesel</span>
+            <button class="play" type="button" data-demo="upbeat" aria-label="Redă fragmentul Pop vesel" aria-pressed="false">▶</button>
+            <h3>Legenda din gașcă</h3>
+            <p>Cadou amuzant pentru cel mai bun prieten</p>
+          </article>
+        </div>
+        <p id="demoStatus" class="sr-only" role="status" aria-live="polite"></p>
+      </div>
+    </section>
 
-    <section id="preturi"><div class="wrap"><div class="section-head"><span>Pachete de lansare</span><h2>Alege cum vrei să sune povestea</h2><p>Prețurile pot fi modificate ușor înainte de publicare.</p></div><div class="prices"><article class="price"><h3>Mini</h3><div class="amount">79 <small>lei</small></div><ul><li>Melodie 1–2 minute</li><li>Versuri personalizate</li><li>Fișier MP3</li><li>O revizie minoră</li></ul><button class="btn secondary" onclick="pick('Mini — 79 lei')">Aleg Mini</button></article><article class="price popular"><span class="ribbon">Cel mai ales</span><h3>Poveste</h3><div class="amount">149 <small>lei</small></div><ul><li>Melodie 2–3 minute</li><li>Versuri detaliate</li><li>MP3 + copertă digitală</li><li>Două variante de refren</li><li>O revizie inclusă</li></ul><button class="btn primary" onclick="pick('Poveste — 149 lei')">Aleg Poveste</button></article><article class="price"><h3>Moment</h3><div class="amount">249 <small>lei</small></div><ul><li>Tot din pachetul Poveste</li><li>Videoclip vertical cu versuri</li><li>Format pentru Reels/TikTok</li><li>Livrare prioritară</li></ul><button class="btn secondary" onclick="pick('Moment — 249 lei')">Aleg Moment</button></article></div></div></section>
+    <section id="preturi" aria-labelledby="prices-title">
+      <div class="wrap">
+        <div class="section-head">
+          <span>Pachete</span>
+          <h2 id="prices-title">Alege cum vrei să sune povestea</h2>
+          <p>Detaliile și termenul de livrare se confirmă în scris înainte de începerea lucrului.</p>
+        </div>
+        <div class="prices">
+          <article class="price">
+            <h3>Mini</h3><div class="amount">79 <small>lei</small></div>
+            <ul><li>Melodie 1–2 minute</li><li>Versuri personalizate</li><li>Fișier MP3</li><li>O revizie minoră</li></ul>
+            <button class="btn secondary" type="button" data-package="mini">Aleg Mini</button>
+          </article>
+          <article class="price popular">
+            <span class="ribbon">Cel mai ales</span>
+            <h3>Poveste</h3><div class="amount">149 <small>lei</small></div>
+            <ul><li>Melodie 2–3 minute</li><li>Versuri detaliate</li><li>MP3 + copertă digitală</li><li>Două variante de refren</li><li>O revizie inclusă</li></ul>
+            <button class="btn primary" type="button" data-package="poveste">Aleg Poveste</button>
+          </article>
+          <article class="price">
+            <h3>Moment</h3><div class="amount">249 <small>lei</small></div>
+            <ul><li>Tot din pachetul Poveste</li><li>Videoclip vertical cu versuri</li><li>Format pentru Reels/TikTok</li><li>Livrare prioritară</li></ul>
+            <button class="btn secondary" type="button" data-package="moment">Aleg Moment</button>
+          </article>
+        </div>
+      </div>
+    </section>
 
-    <section class="order" id="comanda"><div class="wrap"><div class="section-head"><span>Începe aici</span><h2>Spune-ne povestea ta</h2><p>Formularul pregătește automat un e-mail cu toate detaliile comenzii.</p></div><div class="form-shell"><aside class="form-side"><h3>O melodie pe care n-o mai are nimeni.</h3><p>Cu cât ne dai mai multe detalii sincere, cu atât piesa va fi mai personală.</p><div class="promise"><div><b>01</b><span>Datele nu sunt publicate fără acord.</span></div><div><b>02</b><span>Primești confirmarea înainte să începem.</span></div><div><b>03</b><span>Plata se stabilește după confirmare.</span></div></div></aside><form class="form" id="orderForm"><div class="success" id="success">E-mailul tău este pregătit. Se va deschide aplicația de e-mail pentru trimitere.</div><div class="fields"><div class="field"><label for="name">Numele tău</label><input id="name" required placeholder="Ex: Maria" /></div><div class="field"><label for="email">E-mail</label><input id="email" type="email" required placeholder="maria@email.ro" /></div><div class="field"><label for="occasion">Ocazia</label><select id="occasion" required><option value="">Alege ocazia</option><option>Aniversare de cuplu</option><option>Zi de naștere</option><option>Nuntă / cerere</option><option>Pentru mamă / tată</option><option>Pentru un prieten</option><option>Altă ocazie</option></select></div><div class="field"><label for="package">Pachet</label><select id="package" required><option value="">Alege pachetul</option><option>Mini — 79 lei</option><option>Poveste — 149 lei</option><option>Moment — 249 lei</option></select></div><div class="field"><label for="person">Pentru cine este?</label><input id="person" required placeholder="Nume sau poreclă" /></div><div class="field"><label for="style">Stilul melodiei</label><select id="style"><option>Romantic pop</option><option>Baladă emoționantă</option><option>Pop vesel</option><option>Trap melodic</option><option>Acustic</option><option>Las alegerea la voi</option></select></div><div class="field full"><label for="story">Povestea și amintirile voastre</label><textarea id="story" required placeholder="Cum v-ați cunoscut? Ce momente, expresii sau glume trebuie să apară?"></textarea></div><div class="field full"><label for="avoid">Ce să evităm? (opțional)</label><input id="avoid" placeholder="Subiecte, nume sau expresii de evitat" /></div></div><div class="checks"><label><input id="rights" type="checkbox" required /> Confirm că pot transmite aceste informații și că nu solicit imitarea vocii unei persoane fără acord.</label><label><input id="portfolio" type="checkbox" /> Sunt de acord ca un fragment să fie folosit în portofoliu (opțional).</label></div><button class="btn primary" type="submit">Trimite cererea prin e-mail →</button><p class="notice">Înainte de publicare, înlocuiește adresa demonstrativă din cod cu adresa ta de e-mail.</p></form></div></div></section>
+    <section class="order" id="comanda" aria-labelledby="order-title">
+      <div class="wrap">
+        <div class="section-head">
+          <span>Începe aici</span>
+          <h2 id="order-title">Spune-ne povestea ta</h2>
+          <p>Completează formularul, apoi trimite cererea din aplicația ta de e-mail.</p>
+        </div>
+        <div class="form-shell">
+          <aside class="form-side">
+            <h3>O melodie pe care n-o mai are nimeni.</h3>
+            <p>Cu cât ne dai mai multe detalii sincere, cu atât piesa va fi mai personală.</p>
+            <div class="promise">
+              <div><b>01</b><span>Datele nu sunt stocate de această pagină.</span></div>
+              <div><b>02</b><span>Comanda începe numai după confirmarea prin e-mail.</span></div>
+              <div><b>03</b><span>Nu se procesează plăți pe site.</span></div>
+            </div>
+            <p class="contact-line">Ne poți scrie și direct:<br /><a class="contact-link" id="emailContact" href="mailto:comenzi@povesteapenote.ro">comenzi@povesteapenote.ro</a></p>
+          </aside>
+          <form class="form" id="orderForm">
+            <div class="success" id="success" role="status" aria-live="polite" tabindex="-1" hidden>
+              <h3>Cererea este pregătită, dar încă netrimisă.</h3>
+              <p id="handoffMessage">Alege una dintre variantele de mai jos. Cererea ajunge la noi numai după ce o trimiți din aplicația ta de e-mail.</p>
+              <div class="handoff-actions">
+                <a class="btn primary" id="emailAction" href="#" hidden>Deschide aplicația de e-mail</a>
+                <button class="btn secondary" id="downloadOrder" type="button">Descarcă e-mailul (.eml)</button>
+                <button class="btn secondary" id="copyOrder" type="button">Copiază detaliile</button>
+              </div>
+              <p class="copy-feedback" id="copyFeedback" aria-live="polite"></p>
+              <textarea class="copy-fallback" id="copyFallback" aria-label="Detaliile cererii, selectate pentru copiere manuală" readonly hidden></textarea>
+            </div>
+            <div class="fields">
+              <div class="field">
+                <label for="name">Numele tău</label>
+                <input id="name" name="name" autocomplete="name" maxlength="100" required placeholder="Ex: Maria" />
+              </div>
+              <div class="field">
+                <label for="email">E-mail</label>
+                <input id="email" name="email" type="email" autocomplete="email" maxlength="254" required placeholder="maria@email.ro" />
+              </div>
+              <div class="field">
+                <label for="occasion">Ocazia</label>
+                <select id="occasion" name="occasion" required>
+                  <option value="">Alege ocazia</option>
+                  <option value="Aniversare de cuplu">Aniversare de cuplu</option>
+                  <option value="Zi de naștere">Zi de naștere</option>
+                  <option value="Nuntă / cerere">Nuntă / cerere</option>
+                  <option value="Pentru mamă / tată">Pentru mamă / tată</option>
+                  <option value="Pentru un prieten">Pentru un prieten</option>
+                  <option value="Altă ocazie">Altă ocazie</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="package">Pachet</label>
+                <select id="package" name="package" required>
+                  <option value="">Alege pachetul</option>
+                  <option value="mini">Mini — 79 lei</option>
+                  <option value="poveste">Poveste — 149 lei</option>
+                  <option value="moment">Moment — 249 lei</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="person">Pentru cine este?</label>
+                <input id="person" name="person" maxlength="100" required placeholder="Nume sau poreclă" />
+              </div>
+              <div class="field">
+                <label for="style">Stilul melodiei</label>
+                <select id="style" name="style">
+                  <option value="Romantic pop">Romantic pop</option>
+                  <option value="Baladă emoționantă">Baladă emoționantă</option>
+                  <option value="Pop vesel">Pop vesel</option>
+                  <option value="Trap melodic">Trap melodic</option>
+                  <option value="Acustic">Acustic</option>
+                  <option value="Las alegerea la voi">Las alegerea la voi</option>
+                </select>
+              </div>
+              <div class="field full">
+                <label for="story">Povestea și amintirile voastre</label>
+                <textarea id="story" name="story" required minlength="20" maxlength="4000" placeholder="Cum v-ați cunoscut? Ce momente, expresii sau glume trebuie să apară?"></textarea>
+              </div>
+              <div class="field full">
+                <label for="avoid">Ce să evităm? (opțional)</label>
+                <input id="avoid" name="avoid" maxlength="500" placeholder="Subiecte, nume sau expresii de evitat" />
+              </div>
+            </div>
+            <div class="checks">
+              <label><input id="rights" name="rights" type="checkbox" required /> <span>Confirm că am dreptul să transmit aceste informații și nu solicit imitarea vocii unei persoane fără acord.</span></label>
+              <label><input id="privacyConsent" name="privacyConsent" type="checkbox" required /> <span>Sunt de acord ca detaliile să fie incluse într-un e-mail către adresa de contact, doar pentru gestionarea solicitării. Am citit <a href="#confidentialitate">nota de confidențialitate</a>.</span></label>
+              <label><input id="portfolio" name="portfolio" type="checkbox" /> <span>Sunt de acord ca un fragment să fie folosit în portofoliu (opțional; refuzul nu afectează comanda).</span></label>
+            </div>
+            <button class="btn primary" type="submit">Pregătește cererea →</button>
+            <p class="notice">Site-ul nu trimite și nu salvează formularul automat. Îl vei trimite din aplicația de e-mail; poți descărca și o copie .eml.</p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="legal" id="confidentialitate" aria-labelledby="privacy-title">
+      <div class="wrap">
+        <span class="eyebrow">Informații despre date</span>
+        <h2 id="privacy-title">Confidențialitate</h2>
+        <p>Pagina nu trimite formularul către un server și nu folosește conturi, cookie-uri de analiză sau stocare locală. Informațiile rămân în formularul deschis în browser până când alegi să le trimiți prin e-mail sau să descarci fișierul .eml.</p>
+        <p>Dacă alegi să trimiți e-mailul, aplicația și furnizorul tău de e-mail vor procesa mesajul, iar acesta va ajunge la <a id="privacyEmail" href="mailto:comenzi@povesteapenote.ro">comenzi@povesteapenote.ro</a>. Nu include informații sensibile care nu sunt necesare pentru melodie. Acordul opțional pentru portofoliu poate fi refuzat fără să afecteze cererea.</p>
+        <p>Pentru întrebări despre o cerere trimisă sau pentru a solicita corectarea/ștergerea ei, scrie la adresa de mai sus. Înainte de publicare, operatorul trebuie să completeze aici identitatea legală și orice alte informații de contact cerute pentru activitatea sa.</p>
+      </div>
+    </section>
+
+    <section class="legal" id="termeni" aria-labelledby="terms-title">
+      <div class="wrap">
+        <span class="eyebrow">Cum lucrăm</span>
+        <h2 id="terms-title">Termeni și condiții</h2>
+        <p>Trimiterea unei cereri nu reprezintă acceptarea automată a unei comenzi. Începem lucrul numai după confirmarea prin e-mail a pachetului, prețului, termenului de livrare și detaliilor de plată. Site-ul nu colectează plăți.</p>
+        <p>Conținutul pachetelor și prețurile sunt cele afișate pe această pagină la momentul confirmării. Numărul de revizii și materialele livrate sunt cele precizate în pachet; orice schimbare se stabilește în scris înainte de începerea producției.</p>
+        <p>Clientul confirmă că are dreptul să transmită informațiile incluse în comandă și că nu solicită folosirea sau imitarea neautorizată a vocii unei persoane. Utilizarea, livrarea și eventualele drepturi asupra materialelor finale se confirmă în scris, în conformitate cu legea aplicabilă.</p>
+        <p>Acest rezumat descrie fluxul actual al paginii. Operatorul trebuie să completeze și să verifice condițiile comerciale, identitatea legală, termenele și politicile obligatorii pentru activitatea sa înainte de lansarea publică.</p>
+      </div>
+    </section>
   </main>
 
-  <footer><div class="wrap foot"><div><strong>Poveste pe Note</strong><br/>Melodii personalizate create cu asistență AI.</div><div>© <span id="year"></span> · Confidențialitate · Termeni și condiții</div></div></footer>
+  <footer>
+    <div class="wrap foot">
+      <div><strong>Poveste pe Note</strong><br />Melodii personalizate create cu asistență AI.</div>
+      <div>
+        © <span id="year"></span>
+        <div class="foot-links"><a href="#confidentialitate">Confidențialitate</a><a href="#termeni">Termeni și condiții</a></div>
+      </div>
+    </div>
+  </footer>
 
   <script>
-    document.getElementById('year').textContent=new Date().getFullYear();
-    function pick(p){document.getElementById('package').value=p;document.getElementById('comanda').scrollIntoView({behavior:'smooth'});}
-    function demo(btn){const old=btn.textContent;btn.textContent='♪';setTimeout(()=>{btn.textContent=old;alert('Aici vei putea adăuga mostra ta audio.');},350);}
-    document.getElementById('orderForm').addEventListener('submit',function(e){e.preventDefault();const v=id=>document.getElementById(id).value;const body=`CERERE MELODIE PERSONALIZATĂ\n\nNume: ${v('name')}\nE-mail: ${v('email')}\nOcazie: ${v('occasion')}\nPachet: ${v('package')}\nPentru: ${v('person')}\nStil: ${v('style')}\n\nPOVESTEA:\n${v('story')}\n\nDE EVITAT:\n${v('avoid')||'Nimic specificat'}\n\nAcord portofoliu: ${document.getElementById('portfolio').checked?'Da':'Nu'}`;document.getElementById('success').style.display='block';window.location.href=`mailto:comenzi@povesteapenote.ro?subject=${encodeURIComponent('Comandă melodie — '+v('person'))}&body=${encodeURIComponent(body)}`;});
+    (() => {
+      const ORDER_EMAIL = document.querySelector('meta[name="order-email"]')?.content.trim() || '';
+      const year = document.getElementById('year');
+      year.textContent = new Date().getFullYear();
+
+      for (const linkId of ['emailContact', 'privacyEmail']) {
+        const link = document.getElementById(linkId);
+        if (link && ORDER_EMAIL) {
+          link.href = `mailto:${ORDER_EMAIL}`;
+          link.textContent = ORDER_EMAIL;
+        }
+      }
+
+      const packageSelect = document.getElementById('package');
+      document.querySelectorAll('[data-package]').forEach((button) => {
+        button.addEventListener('click', () => {
+          packageSelect.value = button.dataset.package;
+          packageSelect.dispatchEvent(new Event('change', { bubbles: true }));
+          document.getElementById('comanda').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          packageSelect.focus({ preventScroll: true });
+        });
+      });
+
+      const tracks = {
+        romantic: {
+          title: 'Romantic pop', audioFile: 'assets/audio/locul-meu-e-langa-tine.mp3', bpm: 90, melodyStep: 1, melodyHold: .78,
+          chords: [[62, 66, 69], [57, 61, 64], [59, 62, 66], [55, 59, 62]],
+          bass: [50, 45, 47, 43],
+          melody: [74, 76, 78, 76, 74, 71, 69, 71, 74, 76, 78, 81, 78, 76, 74, 69],
+          melodyWave: 'triangle', melodyVolume: .105, padVolume: .026, bassVolume: .07, percussion: false
+        },
+        ballad: {
+          title: 'Baladă emoționantă', audioFile: 'assets/audio/mama-primul-meu-acasa.mp3', bpm: 76, melodyStep: 2, melodyHold: 1.62,
+          chords: [[60, 64, 67], [57, 60, 64], [53, 57, 60], [55, 59, 62]],
+          bass: [48, 45, 41, 43],
+          melody: [72, 74, 76, 74, 72, 69, 67, 69],
+          melodyWave: 'sine', melodyVolume: .14, padVolume: .032, bassVolume: .075, percussion: false
+        },
+        upbeat: {
+          title: 'Pop vesel', audioFile: 'assets/audio/legenda-din-gasca.mp3', bpm: 112, melodyStep: .5, melodyHold: .36,
+          chords: [[55, 59, 62], [50, 54, 57], [52, 55, 59], [48, 52, 55]],
+          bass: [43, 38, 40, 36],
+          melody: [79, 79, 74, 76, 79, 82, 79, 76, 74, 74, 71, 74, 76, 79, 76, 74, 79, 82, 83, 82, 79, 76, 74, 76, 74, 76, 79, 82, 79, 76, 74, 71],
+          melodyWave: 'triangle', melodyVolume: .085, padVolume: .018, bassVolume: .095, percussion: true
+        }
+      };
+
+      const demoStatus = document.getElementById('demoStatus');
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      const AudioClass = window.Audio;
+      let audioContext = null;
+      let activeDemo = null;
+      let playSequence = 0;
+      const midiToFrequency = (note) => 440 * Math.pow(2, (note - 69) / 12);
+
+      function scheduleTone(context, destination, note, start, duration, options, sources) {
+        const oscillator = context.createOscillator();
+        const filter = context.createBiquadFilter();
+        const envelope = context.createGain();
+        const attack = Math.min(options.attack ?? .025, duration * .4);
+        const release = options.release ?? .18;
+        const peak = options.volume ?? .08;
+        oscillator.type = options.wave ?? 'sine';
+        oscillator.frequency.setValueAtTime(midiToFrequency(note), start);
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(options.cutoff ?? 5000, start);
+        envelope.gain.setValueAtTime(.0001, start);
+        envelope.gain.exponentialRampToValueAtTime(Math.max(.0002, peak), start + attack);
+        envelope.gain.setValueAtTime(Math.max(.0002, peak), start + duration);
+        envelope.gain.exponentialRampToValueAtTime(.0001, start + duration + release);
+        oscillator.connect(filter);
+        filter.connect(envelope);
+        envelope.connect(destination);
+        oscillator.start(start);
+        oscillator.stop(start + duration + release + .025);
+        sources.push(oscillator);
+      }
+
+      function scheduleKick(context, destination, start, sources) {
+        const oscillator = context.createOscillator();
+        const envelope = context.createGain();
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(120, start);
+        oscillator.frequency.exponentialRampToValueAtTime(48, start + .13);
+        envelope.gain.setValueAtTime(.0001, start);
+        envelope.gain.exponentialRampToValueAtTime(.12, start + .008);
+        envelope.gain.exponentialRampToValueAtTime(.0001, start + .19);
+        oscillator.connect(envelope);
+        envelope.connect(destination);
+        oscillator.start(start);
+        oscillator.stop(start + .21);
+        sources.push(oscillator);
+      }
+
+      function scheduleHat(context, destination, start, sources) {
+        const length = Math.ceil(context.sampleRate * .045);
+        const buffer = context.createBuffer(1, length, context.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let index = 0; index < length; index += 1) data[index] = Math.random() * 2 - 1;
+        const noise = context.createBufferSource();
+        const filter = context.createBiquadFilter();
+        const envelope = context.createGain();
+        noise.buffer = buffer;
+        filter.type = 'highpass';
+        filter.frequency.setValueAtTime(6500, start);
+        envelope.gain.setValueAtTime(.0001, start);
+        envelope.gain.exponentialRampToValueAtTime(.018, start + .004);
+        envelope.gain.exponentialRampToValueAtTime(.0001, start + .04);
+        noise.connect(filter);
+        filter.connect(envelope);
+        envelope.connect(destination);
+        noise.start(start);
+        noise.stop(start + .05);
+        sources.push(noise);
+      }
+
+      function setButtonIdle(button, track) {
+        button.textContent = '▶';
+        button.setAttribute('aria-label', `Redă fragmentul ${track.title}`);
+        button.setAttribute('aria-pressed', 'false');
+        button.classList.remove('is-playing');
+      }
+
+      function stopDemo(announce = true) {
+        if (!activeDemo) return;
+        const previous = activeDemo;
+        activeDemo = null;
+        window.clearTimeout(previous.finishTimer);
+        if (previous.player) {
+          previous.player.pause();
+          try { previous.player.currentTime = 0; } catch (_) { /* The media may not have loaded yet. */ }
+        }
+        if (previous.bus) {
+          const now = audioContext?.currentTime ?? 0;
+          try {
+            previous.bus.gain.cancelScheduledValues(now);
+            previous.bus.gain.setValueAtTime(Math.max(.0001, previous.bus.gain.value), now);
+            previous.bus.gain.linearRampToValueAtTime(.0001, now + .06);
+          } catch (_) { /* AudioContext may already be closing. */ }
+        }
+        for (const source of previous.sources || []) {
+          try { source.stop((audioContext?.currentTime ?? 0) + .07); } catch (_) { /* A source may have ended already. */ }
+        }
+        setButtonIdle(previous.button, previous.track);
+        demoStatus.textContent = announce ? `Redarea fragmentului ${previous.track.title} a fost oprită.` : '';
+      }
+
+      function finishDemo() {
+        if (!activeDemo) return;
+        const finished = activeDemo;
+        activeDemo = null;
+        if (finished.player) {
+          finished.player.pause();
+          try { finished.player.currentTime = 0; } catch (_) { /* Ignore reset errors after playback. */ }
+        }
+        setButtonIdle(finished.button, finished.track);
+        demoStatus.textContent = `Fragmentul ${finished.track.title} s-a încheiat.`;
+      }
+
+      async function tryPlayAudioFile(button, track, requestId) {
+        if (!track.audioFile || typeof AudioClass !== 'function') return false;
+        const player = new AudioClass(track.audioFile);
+        player.preload = 'none';
+        const state = { button, track, player, sources: [], finishTimer: null };
+        activeDemo = state;
+        button.textContent = '…';
+        button.setAttribute('aria-label', `Se încarcă fragmentul ${track.title}`);
+        button.setAttribute('aria-pressed', 'true');
+        button.classList.add('is-playing');
+        demoStatus.textContent = `Se încarcă mostra audio ${track.title}.`;
+        player.addEventListener('ended', () => {
+          if (activeDemo === state) finishDemo();
+        }, { once: true });
+
+        try {
+          const playback = player.play();
+          if (playback && typeof playback.then === 'function') await playback;
+          if (requestId !== playSequence || activeDemo !== state) {
+            player.pause();
+            return true;
+          }
+          button.textContent = '■';
+          button.setAttribute('aria-label', `Oprește fragmentul ${track.title}`);
+          demoStatus.textContent = `Se redă mostra audio ${track.title}. Apasă din nou pentru oprire.`;
+          return true;
+        } catch (_) {
+          if (activeDemo === state) {
+            activeDemo = null;
+            setButtonIdle(button, track);
+          }
+          player.pause();
+          return false;
+        }
+      }
+
+      async function playSynthDemo(button, track, requestId) {
+        if (!AudioContextClass) {
+          demoStatus.textContent = 'Redarea audio nu este disponibilă în acest browser. Încearcă un browser actualizat.';
+          return;
+        }
+        try {
+          audioContext ||= new AudioContextClass();
+          await audioContext.resume();
+          if (requestId !== playSequence) return;
+          const beat = 60 / track.bpm;
+          const start = audioContext.currentTime + .06;
+          const bus = audioContext.createGain();
+          bus.gain.setValueAtTime(.72, start);
+          bus.connect(audioContext.destination);
+          const sources = [];
+          const state = { button, track, bus, sources, finishTimer: null };
+          activeDemo = state;
+          button.textContent = '■';
+          button.setAttribute('aria-label', `Oprește fragmentul ${track.title}`);
+          button.setAttribute('aria-pressed', 'true');
+          button.classList.add('is-playing');
+          demoStatus.textContent = `Se redă fragmentul demonstrativ ${track.title}. Apasă din nou pentru oprire.`;
+
+          track.chords.forEach((chord, bar) => {
+            chord.forEach((note) => scheduleTone(audioContext, bus, note, start + bar * 4 * beat, 3.55 * beat, {
+              wave: 'sine', volume: track.padVolume, attack: .35, release: .5, cutoff: 1500
+            }, sources));
+            const hits = track.percussion ? [0, 2] : [0];
+            hits.forEach((offset) => scheduleTone(audioContext, bus, track.bass[bar], start + (bar * 4 + offset) * beat, 1.45 * beat, {
+              wave: 'sine', volume: track.bassVolume, attack: .02, release: .16, cutoff: 600
+            }, sources));
+            if (track.percussion) {
+              scheduleKick(audioContext, bus, start + bar * 4 * beat, sources);
+              scheduleKick(audioContext, bus, start + (bar * 4 + 2) * beat, sources);
+              for (let eighth = 0; eighth < 8; eighth += 1) {
+                scheduleHat(audioContext, bus, start + (bar * 4 + eighth * .5) * beat, sources);
+              }
+            }
+          });
+          track.melody.forEach((note, index) => {
+            if (note === null) return;
+            scheduleTone(audioContext, bus, note, start + index * track.melodyStep * beat, track.melodyHold * beat, {
+              wave: track.melodyWave, volume: track.melodyVolume, attack: .025, release: .16,
+              cutoff: track.percussion ? 4200 : 3200
+            }, sources);
+          });
+          const durationMs = (16 * beat + .8) * 1000;
+          state.finishTimer = window.setTimeout(finishDemo, durationMs);
+        } catch (error) {
+          if (requestId !== playSequence) return;
+          stopDemo(false);
+          demoStatus.textContent = 'Nu am putut porni sunetul. Verifică permisiunile browserului și încearcă din nou.';
+          console.error('Audio demo failed:', error);
+        }
+      }
+
+      async function playDemo(button, trackKey) {
+        if (activeDemo?.button === button) {
+          playSequence += 1;
+          stopDemo(true);
+          return;
+        }
+        stopDemo(false);
+        const requestId = ++playSequence;
+        const track = tracks[trackKey];
+        if (track.audioFile) {
+          const fileStarted = await tryPlayAudioFile(button, track, requestId);
+          if (fileStarted || requestId !== playSequence) return;
+        }
+        await playSynthDemo(button, track, requestId);
+      }
+
+      document.querySelectorAll('[data-demo]').forEach((button) => {
+        button.addEventListener('click', () => playDemo(button, button.dataset.demo));
+      });
+      window.addEventListener('pagehide', () => stopDemo(false));
+
+      const form = document.getElementById('orderForm');
+      const storyField = document.getElementById('story');
+      const success = document.getElementById('success');
+      const handoffMessage = document.getElementById('handoffMessage');
+      const emailAction = document.getElementById('emailAction');
+      const copyFallback = document.getElementById('copyFallback');
+      const copyFeedback = document.getElementById('copyFeedback');
+      let preparedRequest = null;
+
+      function clearPreparedRequest() {
+        success.hidden = true;
+        copyFallback.hidden = true;
+        copyFeedback.textContent = '';
+        emailAction.hidden = true;
+        emailAction.removeAttribute('href');
+        preparedRequest = null;
+      }
+
+      form.addEventListener('input', clearPreparedRequest);
+      form.addEventListener('change', clearPreparedRequest);
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        storyField.setCustomValidity(storyField.value.trim().length >= 20 ? '' : 'Te rugăm să scrii cel puțin 20 de caractere despre poveste.');
+        if (!form.reportValidity()) return;
+
+        const value = (id) => document.getElementById(id).value.trim();
+        const selectedPackage = packageSelect.options[packageSelect.selectedIndex].text;
+        const subject = `Cerere melodie personalizată — ${value('person')}`;
+        const body = [
+          'CERERE MELODIE PERSONALIZATĂ',
+          '',
+          `Nume: ${value('name')}`,
+          `E-mail: ${value('email')}`,
+          `Ocazie: ${value('occasion')}`,
+          `Pachet: ${selectedPackage}`,
+          `Pentru: ${value('person')}`,
+          `Stil: ${value('style')}`,
+          '',
+          'POVESTEA:',
+          value('story'),
+          '',
+          'DE EVITAT:',
+          value('avoid') || 'Nimic specificat',
+          '',
+          `Acord pentru portofoliu: ${document.getElementById('portfolio').checked ? 'Da' : 'Nu'}`
+        ].join('\n');
+
+        const mailto = `mailto:${ORDER_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        preparedRequest = { subject, body, mailto };
+        const mailtoFits = ORDER_EMAIL && mailto.length <= 1800;
+        emailAction.hidden = !mailtoFits;
+        if (mailtoFits) emailAction.href = mailto;
+        handoffMessage.textContent = mailtoFits
+          ? `Cererea nu a fost trimisă încă. Apasă „Deschide aplicația de e-mail”, apoi apasă Trimite. Destinatar: ${ORDER_EMAIL}.`
+          : `Cererea nu a fost trimisă încă. Este prea lungă pentru un link e-mail sigur; descarc-o ca fișier .eml sau copiază detaliile și trimite-le la ${ORDER_EMAIL || 'adresa de contact a site-ului'}.`;
+        success.hidden = false;
+        success.focus();
+      });
+
+      function encodeBase64Utf8(text) {
+        const bytes = new TextEncoder().encode(text);
+        let binary = '';
+        for (let index = 0; index < bytes.length; index += 0x8000) {
+          binary += String.fromCharCode(...bytes.subarray(index, index + 0x8000));
+        }
+        return btoa(binary).replace(/.{1,76}/g, '$&\r\n').trim();
+      }
+
+      function createEml(request) {
+        const encodedSubject = encodeBase64Utf8(request.subject).replace(/\r\n/g, '');
+        return [
+          `To: ${ORDER_EMAIL}`,
+          `Subject: =?UTF-8?B?${encodedSubject}?=`,
+          'MIME-Version: 1.0',
+          'Content-Type: text/plain; charset=UTF-8',
+          'Content-Transfer-Encoding: base64',
+          '',
+          encodeBase64Utf8(request.body),
+          ''
+        ].join('\r\n');
+      }
+
+      document.getElementById('downloadOrder').addEventListener('click', () => {
+        if (!preparedRequest) return;
+        const blob = new Blob([createEml(preparedRequest)], { type: 'message/rfc822;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const downloadLink = document.createElement('a');
+        downloadLink.href = url;
+        downloadLink.download = 'cerere-melodie-personalizata.eml';
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        downloadLink.remove();
+        window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+        copyFeedback.textContent = 'Fișierul .eml a fost descărcat. Deschide-l într-o aplicație de e-mail și apasă Trimite.';
+      });
+
+      document.getElementById('copyOrder').addEventListener('click', async () => {
+        if (!preparedRequest) return;
+        try {
+          await navigator.clipboard.writeText(preparedRequest.body);
+          copyFallback.hidden = true;
+          copyFeedback.textContent = 'Detaliile au fost copiate. Le poți lipi într-un e-mail către ' + ORDER_EMAIL + '.';
+        } catch (_) {
+          copyFallback.value = preparedRequest.body;
+          copyFallback.hidden = false;
+          copyFallback.focus();
+          copyFallback.select();
+          copyFeedback.textContent = 'Copierea automată nu este permisă aici. Textul este selectat; copiază-l manual și trimite-l la ' + ORDER_EMAIL + '.';
+        }
+      });
+    })();
   </script>
 </body>
 </html>
