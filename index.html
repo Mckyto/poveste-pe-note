@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Melodii personalizate create din povestea ta — un cadou unic pentru aniversări, cupluri și oameni dragi." />
   <meta name="order-email" content="povestepenote.comenzi@gmail.com" />
+  <!-- Opțional: aliasul aleatoriu primit de la FormSubmit după activare (ex. 8f3c1d9a2b).
+       Dacă este completat, cererile se trimit la alias, iar adresa de mai sus rămâne doar
+       pentru contact și variantele de rezervă. Actualizează atunci și atributul "action" al
+       formularului, folosit fără JavaScript. -->
+  <meta name="formsubmit-address" content="" />
   <title>Poveste pe Note — Melodii personalizate</title>
   <style>
     :root {
@@ -166,15 +171,26 @@
     .checks input { flex: 0 0 auto; margin-top: 4px; accent-color: var(--rose); }
     .form > .btn { width: 100%; }
     .notice { font-size: 11px; color: var(--muted); text-align: center; margin-top: 12px; }
+    .form-alert { background: #fdeeed; color: #8a2a2a; border: 1px solid #f3c6c2; padding: 16px 18px; border-radius: 14px; margin-bottom: 18px; font-size: 13px; }
+    .form-alert h3 { font: 700 16px/1.3 system-ui, sans-serif; margin: 0 0 6px; }
+    .form-alert p { margin: 0; }
+    .field.is-invalid input, .field.is-invalid select, .field.is-invalid textarea { border-color: #d14b4b; box-shadow: 0 0 0 3px #fbe3e1; }
+    .checks.is-invalid { color: #8a2a2a; }
     .success { background: #eef9f1; color: #2d6f3f; padding: 18px; border-radius: 14px; margin-bottom: 18px; font-size: 13px; }
     .success h3 { font: 700 17px/1.3 system-ui, sans-serif; margin: 0 0 7px; }
     .success p { margin: 7px 0; }
+    .success.pending { background: #eef3fb; color: #27456f; }
+    .success.warn { background: #fff6e4; color: #7c5416; }
     .handoff-actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 14px; }
     .handoff-actions .btn { padding: 10px 16px; font-size: 13px; }
-    .copy-fallback { width: 100%; margin-top: 12px; min-height: 100px; border: 1px solid #b5d8bd; border-radius: 10px; padding: 10px; color: var(--ink); background: #fff; }
+    .btn.is-disabled { opacity: .6; cursor: not-allowed; pointer-events: none; transform: none; }
+    .manual-fallback { margin-top: 16px; border: 1px solid var(--line); border-radius: 14px; padding: 0 16px; font-size: 13px; color: var(--muted); background: #fff; }
+    .manual-fallback summary { cursor: pointer; padding: 12px 0; font-weight: 700; color: var(--ink); }
+    .manual-fallback[open] summary { border-bottom: 1px solid var(--line); margin-bottom: 10px; }
+    .manual-fallback p { margin: 8px 0 12px; }
+    .manual-fallback .handoff-actions { margin: 0 0 12px; }
+    .copy-fallback { width: 100%; margin: 0 0 12px; min-height: 100px; border: 1px solid var(--line); border-radius: 10px; padding: 10px; color: var(--ink); background: #fff; }
     .copy-feedback { min-height: 1.4em; }
-    .success.warn { background: #fff6e4; color: #7c5416; }
-    .success.warn .copy-fallback { border-color: #e6cfa2; }
     .honeypot { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
 
     .legal { background: #fff; border-top: 1px solid var(--line); }
@@ -223,7 +239,7 @@
   </style>
 </head>
 <body>
-  <noscript><div class="noscript">Pentru redarea mostrelor și pregătirea cererii, activează JavaScript în browser.</div></noscript>
+  <noscript><div class="noscript">Fără JavaScript, mostrele audio nu pot fi redate. Formularul funcționează în continuare: cererea se trimite prin FormSubmit ca pagină întreagă, treci printr-o scurtă verificare anti-robot și revii apoi pe această pagină.</div></noscript>
   <header class="wrap">
     <nav aria-label="Navigare principală">
       <a class="brand" href="#top">Poveste pe <i>Note</i></a>
@@ -338,20 +354,32 @@
         <div class="section-head">
           <span>Începe aici</span>
           <h2 id="order-title">Spune-ne povestea ta</h2>
-          <p>Completează formularul și trimite cererea direct din pagină. Îți răspundem pe e-mailul indicat.</p>
+          <p>Completează formularul și trimite cererea de aici. Primești imediat o confirmare pe e-mail, apoi îți răspundem personal pe aceeași adresă.</p>
         </div>
         <div class="form-shell">
           <aside class="form-side">
             <h3>O melodie pe care n-o mai are nimeni.</h3>
             <p>Cu cât ne dai mai multe detalii sincere, cu atât piesa va fi mai personală.</p>
             <div class="promise">
-              <div><b>01</b><span>Cererea pleacă direct de aici, prin FormSubmit; pagina nu salvează datele.</span></div>
-              <div><b>02</b><span>Comanda începe numai după confirmarea prin e-mail.</span></div>
+              <div><b>01</b><span>Cererea pleacă prin FormSubmit, după o scurtă verificare anti-robot; pagina nu salvează datele.</span></div>
+              <div><b>02</b><span>Primești automat o confirmare pe e-mail; comanda începe numai după ce confirmăm detaliile în scris.</span></div>
               <div><b>03</b><span>Nu se procesează plăți pe site.</span></div>
             </div>
             <p class="contact-line">Ne poți scrie și direct:<br /><a class="contact-link" id="emailContact" href="mailto:povestepenote.comenzi@gmail.com">povestepenote.comenzi@gmail.com</a></p>
           </aside>
-          <form class="form" id="orderForm" novalidate>
+          <!--
+            Trimiterea clasică prin FormSubmit (POST multipart către https://formsubmit.co/<adresa>).
+            Fără JavaScript, formularul se trimite ca pagină întreagă; cu JavaScript, "action" se
+            sincronizează cu meta-tagul "order-email", iar "target" se setează din script către
+            fereastra de verificare. Nu adăuga _captcha=false: ar opri confirmarea pentru client
+            (_autoresponse nu funcționează fără reCAPTCHA și nici la trimiterile AJAX).
+          -->
+          <form class="form" id="orderForm" action="https://formsubmit.co/povestepenote.comenzi@gmail.com" method="POST" enctype="multipart/form-data" novalidate>
+            <input type="hidden" id="formSubject" name="_subject" value="Cerere melodie personalizată" />
+            <input type="hidden" name="_template" value="table" />
+            <input type="hidden" id="formNext" name="_next" value="https://mckyto.github.io/poveste-pe-note/?cerere=ok" />
+            <!-- Mesajul de confirmare primit automat de client (FormSubmit adaugă și o copie a cererii). -->
+            <input type="hidden" name="_autoresponse" value="Mulțumim! Am primit cererea ta pentru o melodie personalizată; mai jos ai o copie a detaliilor trimise. Revenim pe această adresă în cel mai scurt timp, cu confirmarea pachetului, a prețului și a termenului de livrare. Dacă vrei să adaugi ceva între timp, răspunde la acest e-mail. Cu drag, Poveste pe Note" />
             <input class="honeypot" type="text" id="honey" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" />
             <div class="form-alert" id="formError" role="alert" aria-live="assertive" tabindex="-1" hidden>
               <h3>Verifică formularul</h3>
@@ -361,17 +389,13 @@
               <h3 id="successTitle">Cererea a fost trimisă.</h3>
               <p id="handoffMessage">Îți răspundem pe e-mailul din formular.</p>
               <div class="handoff-actions">
-                <a class="btn primary" id="emailAction" href="#" hidden>Deschide aplicația de e-mail</a>
-                <button class="btn secondary" id="downloadOrder" type="button">Descarcă o copie (.eml)</button>
-                <button class="btn secondary" id="copyOrder" type="button">Copiază detaliile</button>
+                <button class="btn secondary" id="focusSubmitWindow" type="button" hidden>Arată fereastra de verificare</button>
               </div>
-              <p class="copy-feedback" id="copyFeedback" aria-live="polite"></p>
-              <textarea class="copy-fallback" id="copyFallback" aria-label="Detaliile cererii, selectate pentru copiere manuală" readonly hidden></textarea>
             </div>
             <div class="fields">
               <div class="field">
                 <label for="name">Numele tău</label>
-                <input id="name" name="name" autocomplete="name" maxlength="100" required placeholder="Ex: Maria" />
+                <input id="name" name="nume" autocomplete="name" maxlength="100" required placeholder="Ex: Maria" />
               </div>
               <div class="field">
                 <label for="email">E-mail</label>
@@ -379,7 +403,7 @@
               </div>
               <div class="field">
                 <label for="occasion">Ocazia</label>
-                <select id="occasion" name="occasion" required>
+                <select id="occasion" name="ocazie" required>
                   <option value="">Alege ocazia</option>
                   <option value="Aniversare de cuplu">Aniversare de cuplu</option>
                   <option value="Zi de naștere">Zi de naștere</option>
@@ -391,20 +415,20 @@
               </div>
               <div class="field">
                 <label for="package">Pachet</label>
-                <select id="package" name="package" required>
+                <select id="package" name="pachet" required>
                   <option value="">Alege pachetul</option>
-                  <option value="mini">Mini — 79 lei</option>
-                  <option value="poveste">Poveste — 149 lei</option>
-                  <option value="moment">Moment — 249 lei</option>
+                  <option value="Mini — 79 lei" data-package-key="mini">Mini — 79 lei</option>
+                  <option value="Poveste — 149 lei" data-package-key="poveste">Poveste — 149 lei</option>
+                  <option value="Moment — 249 lei" data-package-key="moment">Moment — 249 lei</option>
                 </select>
               </div>
               <div class="field">
                 <label for="person">Pentru cine este?</label>
-                <input id="person" name="person" maxlength="100" required placeholder="Nume sau poreclă" />
+                <input id="person" name="pentru" maxlength="100" required placeholder="Nume sau poreclă" />
               </div>
               <div class="field">
                 <label for="style">Stilul melodiei</label>
-                <select id="style" name="style">
+                <select id="style" name="stil">
                   <option value="Romantic pop">Romantic pop</option>
                   <option value="Baladă emoționantă">Baladă emoționantă</option>
                   <option value="Pop vesel">Pop vesel</option>
@@ -415,20 +439,31 @@
               </div>
               <div class="field full">
                 <label for="story">Povestea și amintirile voastre</label>
-                <textarea id="story" name="story" required minlength="20" maxlength="4000" placeholder="Cum v-ați cunoscut? Ce momente, expresii sau glume trebuie să apară?"></textarea>
+                <textarea id="story" name="povestea" required minlength="20" maxlength="4000" placeholder="Cum v-ați cunoscut? Ce momente, expresii sau glume trebuie să apară?"></textarea>
               </div>
               <div class="field full">
                 <label for="avoid">Ce să evităm? (opțional)</label>
-                <input id="avoid" name="avoid" maxlength="500" placeholder="Subiecte, nume sau expresii de evitat" />
+                <input id="avoid" name="evita" maxlength="500" placeholder="Subiecte, nume sau expresii de evitat" />
               </div>
             </div>
             <div class="checks">
-              <label><input id="rights" name="rights" type="checkbox" required /> <span>Confirm că am dreptul să transmit aceste informații și nu solicit imitarea vocii unei persoane fără acord.</span></label>
-              <label><input id="privacyConsent" name="privacyConsent" type="checkbox" required /> <span>Sunt de acord ca detaliile completate să fie trimise prin FormSubmit la adresa noastră de e-mail și folosite doar pentru gestionarea acestei cereri. Am citit <a href="#confidentialitate">nota de confidențialitate</a>.</span></label>
-              <label><input id="portfolio" name="portfolio" type="checkbox" /> <span>Sunt de acord ca un fragment să fie folosit în portofoliu (opțional; refuzul nu afectează comanda).</span></label>
+              <label><input id="rights" name="drepturi" type="checkbox" value="Da" required /> <span>Confirm că am dreptul să transmit aceste informații și nu solicit imitarea vocii unei persoane fără acord.</span></label>
+              <label><input id="privacyConsent" name="acord-confidentialitate" type="checkbox" value="Da" required /> <span>Sunt de acord ca detaliile completate să fie trimise prin FormSubmit la adresa noastră de e-mail, ca pe adresa mea să primesc automat o confirmare cu o copie a cererii și ca datele să fie folosite doar pentru gestionarea acestei cereri. Am citit <a href="#confidentialitate">nota de confidențialitate</a>.</span></label>
+              <label><input id="portfolio" name="portofoliu" type="checkbox" value="Da" /> <span>Sunt de acord ca un fragment să fie folosit în portofoliu (opțional; refuzul nu afectează comanda).</span></label>
             </div>
             <button class="btn primary" type="submit">Trimite cererea →</button>
-            <p class="notice">Cererea se trimite direct din pagină, prin serviciul FormSubmit. Dacă trimiterea nu reușește, îți oferim variante de rezervă: descărcare .eml, copiere sau link mailto:.</p>
+            <p class="notice">Cererea pleacă prin serviciul FormSubmit: se deschide o fereastră cu o scurtă verificare anti-robot, apoi primești o confirmare pe e-mail. Dacă ceva nu merge, ai mai jos variantele de trimitere manuală.</p>
+            <details class="manual-fallback" id="manualFallback">
+              <summary>Nu s-a trimis? Trimite cererea manual</summary>
+              <p>Completează formularul corect și apasă „Trimite cererea”; butoanele de mai jos se activează cu detaliile tale. Le poți folosi oricând ca variantă de rezervă sau ca să păstrezi o copie: deschide aplicația de e-mail, descarcă fișierul .eml sau copiază textul și trimite-l la <span id="manualEmail">povestepenote.comenzi@gmail.com</span>.</p>
+              <div class="handoff-actions">
+                <a class="btn primary is-disabled" id="emailAction" aria-disabled="true">Deschide aplicația de e-mail</a>
+                <button class="btn secondary" id="downloadOrder" type="button" disabled>Descarcă o copie (.eml)</button>
+                <button class="btn secondary" id="copyOrder" type="button" disabled>Copiază detaliile</button>
+              </div>
+              <p class="copy-feedback" id="copyFeedback" aria-live="polite"></p>
+              <textarea class="copy-fallback" id="copyFallback" aria-label="Detaliile cererii, selectate pentru copiere manuală" readonly hidden></textarea>
+            </details>
           </form>
         </div>
       </div>
@@ -438,10 +473,11 @@
       <div class="wrap">
         <span class="eyebrow">Informații despre date</span>
         <h2 id="privacy-title">Confidențialitate</h2>
-        <p>Pagina nu folosește conturi, cookie-uri de analiză sau stocare locală. Când apeși „Trimite cererea”, datele completate (nume, e-mail, ocazie, pachet, povestea, ce vrei să evităm și opțiunile bifate) sunt trimise direct de aici, prin serviciul FormSubmit, la adresa noastră de e-mail. Nu ai nevoie de o aplicație de e-mail pentru asta.</p>
+        <p>Pagina nu folosește conturi, cookie-uri de analiză sau stocare locală. Când apeși „Trimite cererea”, datele completate (nume, e-mail, ocazie, pachet, povestea, ce vrei să evităm și opțiunile bifate) pleacă prin serviciul FormSubmit către adresa noastră de e-mail. Nu ai nevoie de o aplicație de e-mail pentru asta.</p>
         <p>Prelucrăm datele pe baza consimțământului tău, exprimat prin bifarea acordului din formular, exclusiv pentru a-ți răspunde și pentru a realiza melodia. Nu include informații sensibile care nu sunt necesare pentru melodie. Acordul opțional pentru portofoliu poate fi refuzat fără să afecteze cererea.</p>
-        <p>FormSubmit (formsubmit.co) livrează mesajul ca intermediar: datele trec prin serverele sale și sunt păstrate temporar, până la 30 de zile, într-o arhivă de siguranță, ca să nu se piardă nicio cerere. Mesajul ajunge apoi în inboxul nostru de e-mail, unde îl păstrăm doar cât este necesar pentru cererea ta.</p>
-        <p>Dacă trimiterea directă nu este disponibilă (de exemplu, conexiunea se întrerupe sau browserul blochează cererea), îți oferim variante de rezervă: poți descărca cererea ca fișier .eml, copia textul sau deschide linkul mailto:. În acele cazuri mesajul pleacă din aplicația și prin furnizorul tău de e-mail.</p>
+        <p>FormSubmit (formsubmit.co) livrează mesajul ca intermediar: datele trec prin serverele sale și sunt păstrate temporar, până la 30 de zile, într-o arhivă de siguranță, ca să nu se piardă nicio cerere. Înainte de livrare, FormSubmit îți cere o scurtă verificare anti-robot, într-o fereastră separată, folosind Google reCAPTCHA (se aplică politica de confidențialitate a Google). Mesajul ajunge apoi în inboxul nostru de e-mail, unde îl păstrăm doar cât este necesar pentru cererea ta.</p>
+        <p>Imediat după trimitere, FormSubmit trimite automat pe adresa ta de e-mail o confirmare cu o copie a cererii, ca să ai și tu detaliile la îndemână. Dacă nu o găsești în câteva minute, verifică și folderul Spam.</p>
+        <p>Dacă trimiterea prin FormSubmit nu reușește (de exemplu, închizi fereastra de verificare, conexiunea se întrerupe sau browserul blochează fereastra), îți oferim variante de rezervă: poți descărca cererea ca fișier .eml, copia textul sau deschide linkul mailto:. În acele cazuri mesajul pleacă din aplicația și prin furnizorul tău de e-mail, iar confirmarea automată nu se mai trimite.</p>
         <p>Pentru întrebări despre o cerere trimisă sau pentru a solicita corectarea ori ștergerea ei, scrie la <a id="privacyEmail" href="mailto:povestepenote.comenzi@gmail.com">povestepenote.comenzi@gmail.com</a>. Înainte de publicare, operatorul trebuie să completeze aici identitatea legală și orice alte informații de contact cerute pentru activitatea sa.</p>
       </div>
     </section>
@@ -481,21 +517,44 @@
           link.textContent = ORDER_EMAIL;
         }
       }
+      const manualEmail = document.getElementById('manualEmail');
+      if (manualEmail && ORDER_EMAIL) manualEmail.textContent = ORDER_EMAIL;
 
-      // FormSubmit livrează cererea direct la adresa din meta-tagul "order-email",
-      // fără să deschidă aplicația de e-mail a vizitatorului.
-      // După ce adresa este activată, o poți înlocui cu aliasul aleatoriu primit de la
-      // FormSubmit (ex. "8f3c1d9a2b"), ca adresa reală să nu mai apară în pagină.
+      // FormSubmit livrează cererea la adresa din meta-tagul "order-email", pe traseul clasic
+      // (POST de formular, nu AJAX): doar așa FormSubmit trimite și clientului confirmarea
+      // (_autoresponse), iar aceasta cere și reCAPTCHA activ. Verificarea anti-robot se face
+      // într-o fereastră separată, ca vizitatorul să nu piardă pagina.
+      // După activare, adresa poate fi înlocuită cu aliasul aleatoriu primit de la FormSubmit
+      // (ex. "8f3c1d9a2b"), ca adresa reală să nu mai apară în pagină.
       const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const ORDER_ENDPOINT = EMAIL_PATTERN.test(ORDER_EMAIL)
-        ? `https://formsubmit.co/ajax/${ORDER_EMAIL}`
-        : '';
-      const SEND_TIMEOUT_MS = 15000;
+      const ALIAS_PATTERN = /^[A-Za-z0-9]{8,}$/;
+      const FORMSUBMIT_ALIAS = document.querySelector('meta[name="formsubmit-address"]')?.content.trim() || '';
+      const FORMSUBMIT_ADDRESS = ALIAS_PATTERN.test(FORMSUBMIT_ALIAS) || EMAIL_PATTERN.test(FORMSUBMIT_ALIAS)
+        ? FORMSUBMIT_ALIAS
+        : (EMAIL_PATTERN.test(ORDER_EMAIL) ? ORDER_EMAIL : '');
+      const ORDER_ENDPOINT = FORMSUBMIT_ADDRESS ? `https://formsubmit.co/${FORMSUBMIT_ADDRESS}` : '';
+      const SUBMIT_WINDOW_NAME = 'povestePeNoteTrimitere';
+      const SUBMIT_WINDOW_FEATURES = 'popup=yes,width=560,height=760,resizable=yes,scrollbars=yes';
+      const SENT_MESSAGE_TYPE = 'poveste-pe-note:cerere-trimisa';
+      const ACK_MESSAGE_TYPE = 'poveste-pe-note:cerere-confirmata';
+      const RETURN_PARAM = 'cerere';
+      const RETURN_VALUE = 'ok';
+      // Cât așteptăm dovada că FormSubmit a preluat cererea: fereastra de verificare rămâne
+      // deschisă cât timp vizitatorul rezolvă reCAPTCHA, de aceea limita este generoasă.
+      const PROOF_TIMEOUT_MS = 120000;
+      // După ce fereastra se închide, mai lăsăm o clipă ca mesajul de confirmare să ajungă.
+      const CLOSED_GRACE_MS = 1000;
+      const PROOF_POLL_MS = 250;
+      // În fereastra de verificare: cât așteptăm confirmarea paginii principale înainte să
+      // afișăm starea de succes chiar acolo.
+      const ACK_TIMEOUT_MS = 1500;
 
       const packageSelect = document.getElementById('package');
       document.querySelectorAll('[data-package]').forEach((button) => {
         button.addEventListener('click', () => {
-          packageSelect.value = button.dataset.package;
+          const option = Array.from(packageSelect.options)
+            .find((candidate) => candidate.dataset.packageKey === button.dataset.package);
+          packageSelect.value = option ? option.value : '';
           packageSelect.dispatchEvent(new Event('change', { bubbles: true }));
           document.getElementById('comanda').scrollIntoView({ behavior: 'smooth', block: 'start' });
           packageSelect.focus({ preventScroll: true });
@@ -758,10 +817,15 @@
       const formError = document.getElementById('formError');
       const formErrorMessage = document.getElementById('formErrorMessage');
       const handoffMessage = document.getElementById('handoffMessage');
+      const focusSubmitWindowButton = document.getElementById('focusSubmitWindow');
+      const manualFallback = document.getElementById('manualFallback');
       const emailAction = document.getElementById('emailAction');
+      const downloadButton = document.getElementById('downloadOrder');
+      const copyButton = document.getElementById('copyOrder');
       const copyFallback = document.getElementById('copyFallback');
       const copyFeedback = document.getElementById('copyFeedback');
-      const honeyField = document.getElementById('honey');
+      const subjectField = document.getElementById('formSubject');
+      const nextField = document.getElementById('formNext');
       const submitButton = form.querySelector('button[type="submit"]');
       const submitButtonLabel = submitButton.textContent.trim();
       const invalidFieldLabels = {
@@ -776,61 +840,92 @@
         privacyConsent: 'Acordul de confidențialitate'
       };
       let preparedRequest = null;
-      let isPreparing = false;
       let orderSent = false;
+      let pendingAttempt = null;
+      let lastAttempt = null;
 
-      async function sendOrder(payload) {
-        if (!ORDER_ENDPOINT) throw new Error('Adresa de destinație nu este configurată.');
-        const controller = typeof AbortController === 'function' ? new AbortController() : null;
-        const timer = controller ? window.setTimeout(() => controller.abort(), SEND_TIMEOUT_MS) : 0;
-        try {
-          const response = await fetch(ORDER_ENDPOINT, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-            body: JSON.stringify(payload),
-            signal: controller ? controller.signal : undefined
-          });
-          if (!response.ok) throw new Error(`FormSubmit a răspuns cu statusul ${response.status}.`);
-          const result = await response.json().catch(() => null);
-          if (result && String(result.success).toLowerCase() === 'false') {
-            throw new Error(result.message || 'FormSubmit a refuzat cererea.');
-          }
-        } finally {
-          if (timer) window.clearTimeout(timer);
-        }
+      // Cu JavaScript, "action" urmează meta-tagul; fără JavaScript rămâne valoarea din HTML.
+      // "target" nu este în HTML: fără JavaScript, formularul se trimite ca pagină întreagă.
+      if (ORDER_ENDPOINT) form.action = ORDER_ENDPOINT;
+
+      // Pagina de întoarcere (_next) este chiar această pagină, fără hash, cu ?cerere=ok.
+      function buildReturnUrl() {
+        const url = new URL(window.location.href);
+        url.hash = '';
+        url.searchParams.set(RETURN_PARAM, RETURN_VALUE);
+        return url.href;
       }
 
-      function showHandoffOptions() {
-        const mailtoFits = Boolean(ORDER_EMAIL) && preparedRequest.mailto.length <= 1800;
-        emailAction.hidden = !mailtoFits;
-        if (mailtoFits) emailAction.href = preparedRequest.mailto;
+      function focusPanel(panel) {
+        window.requestAnimationFrame(() => {
+          panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          panel.focus({ preventScroll: true });
+        });
+      }
+
+      // Variantele de rezervă (mailto:, .eml, copiere) sunt active doar cu o cerere pregătită.
+      function setFallbackAvailability(available) {
+        downloadButton.disabled = !available;
+        copyButton.disabled = !available;
+        const mailtoFits = available && Boolean(ORDER_EMAIL) && preparedRequest.mailto.length <= 1800;
+        emailAction.hidden = !ORDER_EMAIL || (available && !mailtoFits);
+        if (mailtoFits) {
+          emailAction.href = preparedRequest.mailto;
+          emailAction.classList.remove('is-disabled');
+          emailAction.removeAttribute('aria-disabled');
+        } else {
+          emailAction.removeAttribute('href');
+          emailAction.classList.add('is-disabled');
+          emailAction.setAttribute('aria-disabled', 'true');
+        }
         return mailtoFits;
       }
 
-      function showSentState(visitorEmail) {
-        successTitle.textContent = 'Cererea a fost trimisă ✓';
+      function showPendingState(popup) {
         success.classList.remove('warn');
-        // Cererea a plecat direct: nu mai e nevoie să deschidă aplicația de e-mail.
-        emailAction.hidden = true;
-        emailAction.removeAttribute('href');
-        handoffMessage.textContent = `Am primit cererea. Îți răspundem pe ${visitorEmail} în cel mai scurt timp. Poți păstra o copie a mesajului cu butoanele de mai jos.`;
-        copyFallback.hidden = true;
-        copyFeedback.textContent = '';
+        success.classList.add('pending');
+        successTitle.textContent = 'Se trimite cererea…';
+        handoffMessage.textContent = popup
+          ? 'Finalizează scurta verificare anti-robot din fereastra care tocmai s-a deschis. După verificare, fereastra se închide singură și confirmăm aici trimiterea.'
+          : 'Te ducem la pagina de verificare FormSubmit; după verificare revii automat aici.';
+        focusSubmitWindowButton.hidden = !popup;
         success.hidden = false;
       }
 
-      function showFallbackState(error) {
-        const timedOut = Boolean(error) && error.name === 'AbortError';
-        successTitle.textContent = 'Cererea nu a fost trimisă încă';
-        success.classList.add('warn');
-        const emailLinkAvailable = showHandoffOptions();
-        const destination = ORDER_EMAIL || 'adresa noastră de contact';
-        handoffMessage.textContent = timedOut
-          ? `Trimiterea directă a durat prea mult și a fost oprită, așa că cererea nu a plecat. Alege o variantă de rezervă ca să ajungă la ${destination}.`
-          : `Trimiterea directă nu a reușit, așa că cererea nu a plecat. ${emailLinkAvailable ? 'Deschide aplicația de e-mail, ' : ''}descarcă fișierul .eml sau copiază detaliile și trimite-le la ${destination}.`;
+      function showSentState(visitorEmail) {
+        orderSent = true;
+        success.classList.remove('warn', 'pending');
+        successTitle.textContent = 'Cererea a fost trimisă ✓';
+        const address = visitorEmail || 'adresa de e-mail din formular';
+        handoffMessage.textContent = `Am primit cererea. Ți-am trimis o confirmare cu o copie a detaliilor pe ${address}; dacă nu o vezi în câteva minute, verifică și folderul Spam. Îți răspundem acolo în cel mai scurt timp.`;
+        focusSubmitWindowButton.hidden = true;
+        manualFallback.open = false;
         copyFallback.hidden = true;
         copyFeedback.textContent = '';
         success.hidden = false;
+        submitButton.textContent = 'Cererea a fost trimisă ✓';
+      }
+
+      function showUnconfirmedState(visitorEmail, reason) {
+        orderSent = false;
+        success.classList.remove('pending');
+        success.classList.add('warn');
+        successTitle.textContent = 'Verifică-ți e-mailul';
+        const destination = ORDER_EMAIL || 'adresa noastră de contact';
+        const address = visitorEmail || 'adresa ta de e-mail';
+        const manualNow = `Trimite-o manual, cu una dintre variantele de mai jos, la ${destination}.`;
+        const manualLater = `trimite cererea manual, cu una dintre variantele de mai jos, la ${destination}.`;
+        const messages = {
+          unconfigured: `Trimiterea automată nu este configurată pe această pagină, așa că cererea nu a plecat. ${manualNow}`,
+          error: `Trimiterea prin FormSubmit nu a putut porni, așa că cererea nu a plecat. ${manualNow}`,
+          closed: `Fereastra de verificare s-a închis înainte să primim confirmarea că FormSubmit a preluat cererea. Dacă în câteva minute nu găsești pe ${address} e-mailul nostru de confirmare (verifică și folderul Spam), ${manualLater}`,
+          timeout: `Nu am primit încă confirmarea că FormSubmit a preluat cererea. Dacă ai terminat verificarea și în câteva minute nu găsești pe ${address} e-mailul nostru de confirmare (verifică și folderul Spam), ${manualLater}`
+        };
+        handoffMessage.textContent = messages[reason] || messages.timeout;
+        focusSubmitWindowButton.hidden = true;
+        manualFallback.open = true;
+        success.hidden = false;
+        submitButton.textContent = submitButtonLabel;
       }
 
       function clearValidationFeedback() {
@@ -844,17 +939,18 @@
         });
       }
 
-      function clearPreparedRequest() {
-        if (isPreparing) return;
+      function resetSubmissionState() {
         success.hidden = true;
-        success.classList.remove('warn');
+        success.classList.remove('warn', 'pending');
         successTitle.textContent = 'Cererea a fost trimisă.';
+        focusSubmitWindowButton.hidden = true;
+        manualFallback.open = false;
         copyFallback.hidden = true;
         copyFeedback.textContent = '';
-        emailAction.hidden = true;
-        emailAction.removeAttribute('href');
         preparedRequest = null;
         orderSent = false;
+        setFallbackAvailability(false);
+        form.removeAttribute('aria-busy');
         submitButton.disabled = false;
         submitButton.textContent = submitButtonLabel;
       }
@@ -894,8 +990,8 @@
       }
 
       function handleFormEdit() {
-        if (isPreparing) return;
-        clearPreparedRequest();
+        // Cât timp fereastra de verificare este deschisă, păstrăm starea cererii aflate în curs.
+        if (!pendingAttempt) resetSubmissionState();
         updateStoryValidity();
         if (!formError.hidden) {
           const invalidControls = getInvalidControls();
@@ -904,116 +1000,191 @@
         }
       }
 
+      function settleAttempt(attempt, outcome) {
+        if (attempt.settled) return;
+        attempt.settled = true;
+        window.clearInterval(attempt.poller);
+        window.clearTimeout(attempt.timer);
+        window.clearTimeout(attempt.graceTimer);
+        if (pendingAttempt === attempt) pendingAttempt = null;
+        attempt.resolve(outcome);
+      }
+
+      // A doua dovadă: fereastra de verificare a revenit pe pagina noastră (?cerere=ok). URL-ul
+      // poate fi citit doar pe același origin; o pagină externă (FormSubmit, reCAPTCHA) aruncă
+      // eroare sau arată alt URL, deci nu este considerată succes.
+      function popupReturnedHome(popup) {
+        try {
+          return !popup.closed && String(popup.location.href).includes(`${RETURN_PARAM}=${RETURN_VALUE}`);
+        } catch (_) {
+          return false;
+        }
+      }
+
+      // Se rezolvă cu "confirmed" doar când există dovada că FormSubmit a preluat cererea:
+      // mesajul postMessage trimis de pagina de întoarcere sau URL-ul ferestrei. Altfel, cu
+      // "closed" (fereastra s-a închis fără dovadă) sau "timeout". Un simplu "load" nu contează.
+      function waitForProof(popup, request) {
+        return new Promise((resolve) => {
+          const attempt = { popup, request, resolve, settled: false, poller: 0, timer: 0, graceTimer: 0 };
+          pendingAttempt = attempt;
+          lastAttempt = attempt;
+          attempt.timer = window.setTimeout(() => settleAttempt(attempt, 'timeout'), PROOF_TIMEOUT_MS);
+          attempt.poller = window.setInterval(() => {
+            if (popupReturnedHome(popup)) {
+              settleAttempt(attempt, 'confirmed');
+              return;
+            }
+            if (popup.closed && !attempt.graceTimer) {
+              attempt.graceTimer = window.setTimeout(() => settleAttempt(attempt, 'closed'), CLOSED_GRACE_MS);
+            }
+          }, PROOF_POLL_MS);
+        });
+      }
+
+      function isSameOriginMessage(event, type) {
+        return event.origin === window.location.origin && Boolean(event.data) && event.data.type === type;
+      }
+
+      // Dovada principală: pagina de întoarcere, încărcată în fereastra de verificare, ne anunță.
+      // Acceptăm mesajul doar de pe același origin și îi confirmăm primirea, ca fereastra să se
+      // poată închide singură.
+      window.addEventListener('message', (event) => {
+        if (!isSameOriginMessage(event, SENT_MESSAGE_TYPE)) return;
+        try {
+          if (event.source) event.source.postMessage({ type: ACK_MESSAGE_TYPE }, event.origin);
+        } catch (_) { /* Fereastra poate fi deja închisă. */ }
+        if (pendingAttempt) {
+          settleAttempt(pendingAttempt, 'confirmed');
+          return;
+        }
+        if (orderSent) return;
+        // Dovada a venit după expirare sau după ce pagina a fost reîncărcată.
+        const knownEmail = lastAttempt && preparedRequest && preparedRequest === lastAttempt.request
+          ? preparedRequest.email
+          : '';
+        form.removeAttribute('aria-busy');
+        submitButton.disabled = false;
+        showSentState(knownEmail);
+        focusPanel(success);
+      });
+
+      function openSubmitWindow() {
+        let popup = null;
+        try {
+          popup = window.open('', SUBMIT_WINDOW_NAME, SUBMIT_WINDOW_FEATURES) || null;
+        } catch (error) {
+          console.error('Nu s-a putut deschide fereastra de verificare:', error);
+          return null;
+        }
+        if (!popup) return null;
+        try {
+          const popupDocument = popup.document;
+          if (popupDocument && popupDocument.body && !popupDocument.body.childNodes.length) {
+            popupDocument.title = 'Se trimite cererea… — Poveste pe Note';
+            const note = popupDocument.createElement('p');
+            note.style.cssText = 'font: 16px/1.5 system-ui, sans-serif; margin: 40px auto; max-width: 32em; text-align: center; color: #35262d;';
+            note.textContent = 'Se deschide verificarea FormSubmit… Dacă pagina nu se încarcă în câteva secunde, închide fereastra și folosește varianta manuală de pe site.';
+            popupDocument.body.appendChild(note);
+          }
+        } catch (_) { /* La o retrimitere, fereastra poate fi deja pe alt origin. */ }
+        return popup;
+      }
+
+      focusSubmitWindowButton.addEventListener('click', () => {
+        try { pendingAttempt?.popup?.focus(); } catch (_) { /* Fereastra poate fi închisă. */ }
+      });
+
       form.addEventListener('input', handleFormEdit);
       form.addEventListener('change', handleFormEdit);
-      form.addEventListener('submit', async (event) => {
+      form.addEventListener('submit', (event) => {
         event.preventDefault();
-        if (isPreparing) return;
-        clearPreparedRequest();
+        if (pendingAttempt) settleAttempt(pendingAttempt, 'superseded');
+        resetSubmissionState();
 
         const invalidControls = getInvalidControls();
         if (invalidControls.length) {
           showValidationFeedback(invalidControls);
-          const firstInvalidControl = invalidControls[0];
-          window.requestAnimationFrame(() => {
-            firstInvalidControl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            firstInvalidControl.focus({ preventScroll: true });
-          });
+          focusPanel(invalidControls[0]);
           return;
         }
 
         clearValidationFeedback();
         const value = (id) => document.getElementById(id).value.trim();
-        const selectedPackage = packageSelect.options[packageSelect.selectedIndex].text;
         const requestValues = {
           name: value('name'),
           email: value('email'),
           occasion: value('occasion'),
-          package: selectedPackage,
+          package: packageSelect.options[packageSelect.selectedIndex].text,
           person: value('person'),
           style: value('style'),
           story: value('story'),
           avoid: value('avoid') || 'Nimic specificat',
           portfolio: document.getElementById('portfolio').checked ? 'Da' : 'Nu'
         };
+        const subject = `Cerere melodie personalizată — ${requestValues.person}`;
+        const body = [
+          'CERERE MELODIE PERSONALIZATĂ',
+          '',
+          `Nume: ${requestValues.name}`,
+          `E-mail: ${requestValues.email}`,
+          `Ocazie: ${requestValues.occasion}`,
+          `Pachet: ${requestValues.package}`,
+          `Pentru: ${requestValues.person}`,
+          `Stil: ${requestValues.style}`,
+          '',
+          'POVESTEA:',
+          requestValues.story,
+          '',
+          'DE EVITAT:',
+          requestValues.avoid,
+          '',
+          `Acord pentru portofoliu: ${requestValues.portfolio}`
+        ].join('\n');
+        const mailto = `mailto:${ORDER_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        preparedRequest = { subject, body, mailto, email: requestValues.email };
+        setFallbackAvailability(true);
 
-        isPreparing = true;
+        if (!ORDER_ENDPOINT) {
+          showUnconfirmedState(requestValues.email, 'unconfigured');
+          focusPanel(success);
+          return;
+        }
+
+        // Câmpurile ascunse se completează la trimitere; _honey rămâne gol pentru oameni.
+        subjectField.value = subject;
+        nextField.value = buildReturnUrl();
+
+        // Fereastra se deschide sincron, în gestul utilizatorului, altfel browserul o blochează.
+        // Dacă este totuși blocată, formularul pleacă ca pagină întreagă și revine cu ?cerere=ok.
+        const popup = openSubmitWindow();
+        form.target = popup ? SUBMIT_WINDOW_NAME : '_self';
         form.setAttribute('aria-busy', 'true');
         submitButton.disabled = true;
         submitButton.textContent = 'Se trimite cererea…';
+        showPendingState(popup);
 
         try {
-          await new Promise((resolve) => window.requestAnimationFrame(resolve));
-          const subject = `Cerere melodie personalizată — ${requestValues.person}`;
-          const body = [
-            'CERERE MELODIE PERSONALIZATĂ',
-            '',
-            `Nume: ${requestValues.name}`,
-            `E-mail: ${requestValues.email}`,
-            `Ocazie: ${requestValues.occasion}`,
-            `Pachet: ${requestValues.package}`,
-            `Pentru: ${requestValues.person}`,
-            `Stil: ${requestValues.style}`,
-            '',
-            'POVESTEA:',
-            requestValues.story,
-            '',
-            'DE EVITAT:',
-            requestValues.avoid,
-            '',
-            `Acord pentru portofoliu: ${requestValues.portfolio}`
-          ].join('\n');
-
-          const mailto = `mailto:${ORDER_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-          preparedRequest = { subject, body, mailto };
-
-          // Câmpul "email" este folosit de FormSubmit pentru Reply-To, iar _honey este
-          // capcana anti-spam: dacă un bot o completează, cererea este ignorată discret.
-          const payload = {
-            _subject: subject,
-            _template: 'table',
-            _honey: honeyField ? honeyField.value : '',
-            nume: requestValues.name,
-            email: requestValues.email,
-            ocazie: requestValues.occasion,
-            pachet: requestValues.package,
-            pentru: requestValues.person,
-            stil: requestValues.style,
-            povestea: requestValues.story,
-            evita: requestValues.avoid,
-            portofoliu: requestValues.portfolio
-          };
-
-          try {
-            await sendOrder(payload);
-            orderSent = true;
-            showSentState(requestValues.email);
-            submitButton.textContent = 'Cererea a fost trimisă ✓';
-          } catch (error) {
-            console.error('FormSubmit delivery failed:', error);
-            orderSent = false;
-            showFallbackState(error);
-            submitButton.textContent = submitButtonLabel;
-          }
-
-          window.requestAnimationFrame(() => {
-            success.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            success.focus({ preventScroll: true });
-          });
+          form.submit();
         } catch (error) {
-          console.error('Order form preparation failed:', error);
-          formErrorMessage.textContent = 'A apărut o problemă la pregătirea cererii. Te rugăm să încerci din nou.';
-          formError.hidden = false;
-          window.requestAnimationFrame(() => {
-            formError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            formError.focus({ preventScroll: true });
-          });
-        } finally {
-          isPreparing = false;
+          console.error('FormSubmit submission could not start:', error);
           form.removeAttribute('aria-busy');
           submitButton.disabled = false;
-          if (!preparedRequest) submitButton.textContent = submitButtonLabel;
+          showUnconfirmedState(requestValues.email, 'error');
+          focusPanel(success);
+          return;
         }
+
+        if (!popup) return;
+        focusPanel(success);
+        waitForProof(popup, preparedRequest).then((outcome) => {
+          if (outcome === 'superseded') return;
+          form.removeAttribute('aria-busy');
+          submitButton.disabled = false;
+          if (outcome === 'confirmed') showSentState(requestValues.email);
+          else showUnconfirmedState(requestValues.email, outcome);
+          focusPanel(success);
+        });
       });
 
       function encodeBase64Utf8(text) {
@@ -1039,7 +1210,7 @@
         ].join('\r\n');
       }
 
-      document.getElementById('downloadOrder').addEventListener('click', () => {
+      downloadButton.addEventListener('click', () => {
         if (!preparedRequest) return;
         const blob = new Blob([createEml(preparedRequest)], { type: 'message/rfc822;charset=utf-8' });
         const url = URL.createObjectURL(blob);
@@ -1055,7 +1226,7 @@
           : 'Fișierul .eml a fost descărcat. Deschide-l într-o aplicație de e-mail și apasă Trimite.';
       });
 
-      document.getElementById('copyOrder').addEventListener('click', async () => {
+      copyButton.addEventListener('click', async () => {
         if (!preparedRequest) return;
         try {
           await navigator.clipboard.writeText(preparedRequest.body);
@@ -1074,6 +1245,58 @@
               : 'copiază-l manual și trimite-l la ' + ORDER_EMAIL + '.');
         }
       });
+
+      // Pagina de întoarcere: FormSubmit ne trimite aici (?cerere=ok) după ce a preluat cererea.
+      // În fereastra de verificare anunțăm pagina principală și, după confirmarea ei, închidem
+      // fereastra; fără pagină principală (fereastră blocată, fără JavaScript la trimitere),
+      // afișăm chiar aici starea „Cererea a fost trimisă ✓”.
+      function stripReturnParam(url) {
+        url.searchParams.delete(RETURN_PARAM);
+        try { window.history.replaceState(null, '', url.href); } catch (_) { /* Istoricul poate fi indisponibil. */ }
+      }
+
+      function revealSentStateHere(url) {
+        stripReturnParam(url);
+        showSentState('');
+        focusPanel(success);
+      }
+
+      function handleReturnFromFormSubmit(url) {
+        let opener = null;
+        try {
+          opener = window.opener && !window.opener.closed && window.opener !== window ? window.opener : null;
+        } catch (_) {
+          opener = null;
+        }
+        if (!opener) {
+          revealSentStateHere(url);
+          return;
+        }
+        let ackTimer = 0;
+        const onAck = (event) => {
+          if (!isSameOriginMessage(event, ACK_MESSAGE_TYPE)) return;
+          window.removeEventListener('message', onAck);
+          window.clearTimeout(ackTimer);
+          try { window.close(); } catch (_) { /* Browserul poate refuza închiderea. */ }
+          if (!window.closed) revealSentStateHere(url);
+        };
+        window.addEventListener('message', onAck);
+        ackTimer = window.setTimeout(() => {
+          window.removeEventListener('message', onAck);
+          revealSentStateHere(url);
+        }, ACK_TIMEOUT_MS);
+        try {
+          opener.postMessage({ type: SENT_MESSAGE_TYPE }, window.location.origin);
+        } catch (error) {
+          console.error('Nu am putut anunța pagina principală:', error);
+          window.removeEventListener('message', onAck);
+          window.clearTimeout(ackTimer);
+          revealSentStateHere(url);
+        }
+      }
+
+      const pageUrl = new URL(window.location.href);
+      if (pageUrl.searchParams.get(RETURN_PARAM) === RETURN_VALUE) handleReturnFromFormSubmit(pageUrl);
     })();
   </script>
 </body>
