@@ -13,12 +13,24 @@ Apoi deschide `http://localhost:8000`.
 Adresa de contact se configurează în meta-tagul `order-email` din `index.html`:
 
 ```html
-<meta name="order-email" content="comenzi@povesteapenote.ro" />
+<meta name="order-email" content="povestepenote.comenzi@gmail.com" />
 ```
 
-Formularul validează câmpurile și pregătește un mesaj de e-mail cu toate detaliile. Vizitatorul trebuie să apese „Trimite” în aplicația sa de e-mail. Dacă nu are un client de e-mail configurat sau mesajul este prea lung pentru un link `mailto:`, poate descărca un fișier `.eml` ori copia textul. Site-ul static nu transmite și nu stochează comenzile pe un server.
+Adresa din meta-tag alimentează toate punctele de contact de pe pagină: linkurile `mailto:`, nota de confidențialitate și endpointul FormSubmit. Schimbi adresa într-un singur loc.
 
-Pentru trimitere automată, fără aplicația de e-mail a vizitatorului, este necesar un serviciu/backend de e-mail configurat pentru domeniu; cheile și secretele nu trebuie puse în HTML-ul public.
+Formularul validează câmpurile în browser și trimite cererea direct din pagină, prin [FormSubmit](https://formsubmit.co), către adresa de mai sus. Vizitatorul nu mai are nevoie de o aplicație de e-mail: datele pleacă prin `POST` către `https://formsubmit.co/ajax/<adresa-din-meta>`, ca JSON. Site-ul rămâne static, fără build și fără chei secrete în HTML.
+
+### Cum se activează FormSubmit
+
+1. Prima trimitere către o adresă nouă nu ajunge ca cerere obișnuită: FormSubmit trimite **un e-mail de confirmare** la adresa respectivă, cu un link de activare. Deschide linkul, apoi retrimite o cerere de test.
+2. Nu uita să verifici și folderul Spam; dacă nu confirmi, cererile viitoare nu sunt livrate.
+3. Opțional, după activare FormSubmit îți oferă un **alias aleatoriu** (ex. `8f3c1d9a2b`). Îl poți pune în meta-tagul `order-email` în locul adresei, ca adresa reală să nu mai apară în pagină.
+4. FormSubmit păstrează cererile până la 30 de zile într-o arhivă de siguranță (accesibilă și prin API-ul lor, cu limită de accesări pe zi), apoi le șterge. Acest lucru este menționat și în nota de confidențialitate.
+5. Câmpul `_honey` din formular este capcana anti-spam recomandată de FormSubmit: dacă un bot îl completează, cererea este ignorată discret. Câmpul `email` devine Reply-To, deci poți răspunde direct clientului.
+
+### Variantele de rezervă
+
+Dacă trimiterea directă nu reușește (lipsă internet, blocare de către browser, răspuns de eroare, adresă neactivată sau neconfigurată), formularul păstrează toate variantele de rezervă: link `mailto:` (când mesajul încape într-un link), descărcare `.eml` și copierea detaliilor. Mesajul de pe ecran spune explicit că cererea nu a plecat. Dacă adresa din meta-tag nu este validă, se sare direct la variantele de rezervă, fără să se încerce trimiterea.
 
 ## Încărcarea pieselor demonstrative
 
@@ -32,7 +44,8 @@ Playerul folosește automat fișierul MP3 dacă există; dacă lipsește, redă 
 
 ## Înainte de publicarea comercială
 
-- Confirmă că inboxul din `order-email` există și este monitorizat.
+- Confirmă că inboxul din `order-email` există și este monitorizat, apoi **activează adresa în FormSubmit** (vezi mai sus) și trimite o cerere de test de pe pagina publicată.
+- Verifică dacă pagina este servită prin HTTPS și de pe domeniul real: FormSubmit respinge trimiterile venite din fișiere deschise direct de pe disc (`file://`) sau fără un site valid.
 - Completează identitatea legală a operatorului și verifică politicile afișate, condițiile comerciale, livrarea, anularea și drepturile asupra materialelor.
 - Verifică prețurile și conținutul pachetelor.
 - Publică pagina prin HTTPS.
