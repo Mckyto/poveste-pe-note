@@ -348,7 +348,11 @@
             </div>
             <p class="contact-line">Ne poți scrie și direct:<br /><a class="contact-link" id="emailContact" href="mailto:comenzi@povesteapenote.ro">comenzi@povesteapenote.ro</a></p>
           </aside>
-          <form class="form" id="orderForm">
+          <form class="form" id="orderForm" novalidate>
+            <div class="form-alert" id="formError" role="alert" aria-live="assertive" tabindex="-1" hidden>
+              <h3>Verifică formularul</h3>
+              <p id="formErrorMessage">Completează câmpurile obligatorii și încearcă din nou.</p>
+            </div>
             <div class="success" id="success" role="status" aria-live="polite" tabindex="-1" hidden>
               <h3>Cererea este pregătită, dar încă netrimisă.</h3>
               <p id="handoffMessage">Alege una dintre variantele de mai jos. Cererea ajunge la noi numai după ce o trimiți din aplicația ta de e-mail.</p>
@@ -734,60 +738,184 @@
       const form = document.getElementById('orderForm');
       const storyField = document.getElementById('story');
       const success = document.getElementById('success');
+      const formError = document.getElementById('formError');
+      const formErrorMessage = document.getElementById('formErrorMessage');
       const handoffMessage = document.getElementById('handoffMessage');
       const emailAction = document.getElementById('emailAction');
       const copyFallback = document.getElementById('copyFallback');
       const copyFeedback = document.getElementById('copyFeedback');
+      const submitButton = form.querySelector('button[type="submit"]');
+      const submitButtonLabel = submitButton.textContent.trim();
+      const invalidFieldLabels = {
+        name: 'Numele tău',
+        email: 'Adresa de e-mail',
+        occasion: 'Ocazia',
+        package: 'Pachetul',
+        person: 'Persoana pentru care este melodia',
+        style: 'Stilul melodiei',
+        story: 'Povestea',
+        rights: 'Confirmarea privind drepturile',
+        privacyConsent: 'Acordul de confidențialitate'
+      };
       let preparedRequest = null;
+      let isPreparing = false;
+
+      function clearValidationFeedback() {
+        formError.hidden = true;
+        formErrorMessage.textContent = '';
+        form.querySelectorAll('.field.is-invalid, .checks.is-invalid').forEach((group) => {
+          group.classList.remove('is-invalid');
+        });
+        form.querySelectorAll('[aria-invalid="true"]').forEach((field) => {
+          field.removeAttribute('aria-invalid');
+        });
+      }
 
       function clearPreparedRequest() {
+        if (isPreparing) return;
         success.hidden = true;
         copyFallback.hidden = true;
         copyFeedback.textContent = '';
         emailAction.hidden = true;
         emailAction.removeAttribute('href');
         preparedRequest = null;
+        submitButton.disabled = false;
+        submitButton.textContent = submitButtonLabel;
       }
 
-      form.addEventListener('input', clearPreparedRequest);
-      form.addEventListener('change', clearPreparedRequest);
-      form.addEventListener('submit', (event) => {
-        event.preventDefault();
-        storyField.setCustomValidity(storyField.value.trim().length >= 20 ? '' : 'Te rugăm să scrii cel puțin 20 de caractere despre poveste.');
-        if (!form.reportValidity()) return;
+      function updateStoryValidity() {
+        storyField.setCustomValidity(
+          storyField.value.trim().length >= 20 ? '' : 'Te rugăm să scrii cel puțin 20 de caractere despre poveste.'
+        );
+      }
 
+      function getInvalidControls() {
+        updateStoryValidity();
+        return Array.from(form.querySelectorAll('input, select, textarea'))
+          .filter((field) => !field.checkValidity());
+      }
+
+      function describeInvalidControl(field) {
+        const label = invalidFieldLabels[field.id] || 'Câmpul selectat';
+        if (field.validity.valueMissing) {
+          return field === storyField ? `${label} (obligatoriu, minimum 20 de caractere)` : `${label} (obligatoriu)`;
+        }
+        if (field.validity.typeMismatch) return `${label} (verifică formatul)`;
+        if (field === storyField || field.validity.tooShort) return `${label} (minimum 20 de caractere)`;
+        return `${label} (verifică valoarea)`;
+      }
+
+      function showValidationFeedback(invalidControls) {
+        clearValidationFeedback();
+        invalidControls.forEach((field) => {
+          field.setAttribute('aria-invalid', 'true');
+          const group = field.closest('.field, .checks');
+          if (group) group.classList.add('is-invalid');
+        });
+        const descriptions = invalidControls.map(describeInvalidControl);
+        formErrorMessage.textContent = `Completează sau corectează: ${descriptions.join('; ')}.`;
+        formError.hidden = false;
+      }
+
+      function handleFormEdit() {
+        if (isPreparing) return;
+        clearPreparedRequest();
+        updateStoryValidity();
+        if (!formError.hidden) {
+          const invalidControls = getInvalidControls();
+          if (invalidControls.length) showValidationFeedback(invalidControls);
+          else clearValidationFeedback();
+        }
+      }
+
+      form.addEventListener('input', handleFormEdit);
+      form.addEventListener('change', handleFormEdit);
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        if (isPreparing) return;
+        clearPreparedRequest();
+
+        const invalidControls = getInvalidControls();
+        if (invalidControls.length) {
+          showValidationFeedback(invalidControls);
+          const firstInvalidControl = invalidControls[0];
+          window.requestAnimationFrame(() => {
+            firstInvalidControl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            firstInvalidControl.focus({ preventScroll: true });
+          });
+          return;
+        }
+
+        clearValidationFeedback();
         const value = (id) => document.getElementById(id).value.trim();
         const selectedPackage = packageSelect.options[packageSelect.selectedIndex].text;
-        const subject = `Cerere melodie personalizată — ${value('person')}`;
-        const body = [
-          'CERERE MELODIE PERSONALIZATĂ',
-          '',
-          `Nume: ${value('name')}`,
-          `E-mail: ${value('email')}`,
-          `Ocazie: ${value('occasion')}`,
-          `Pachet: ${selectedPackage}`,
-          `Pentru: ${value('person')}`,
-          `Stil: ${value('style')}`,
-          '',
-          'POVESTEA:',
-          value('story'),
-          '',
-          'DE EVITAT:',
-          value('avoid') || 'Nimic specificat',
-          '',
-          `Acord pentru portofoliu: ${document.getElementById('portfolio').checked ? 'Da' : 'Nu'}`
-        ].join('\n');
+        const requestValues = {
+          name: value('name'),
+          email: value('email'),
+          occasion: value('occasion'),
+          package: selectedPackage,
+          person: value('person'),
+          style: value('style'),
+          story: value('story'),
+          avoid: value('avoid') || 'Nimic specificat',
+          portfolio: document.getElementById('portfolio').checked ? 'Da' : 'Nu'
+        };
 
-        const mailto = `mailto:${ORDER_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-        preparedRequest = { subject, body, mailto };
-        const mailtoFits = ORDER_EMAIL && mailto.length <= 1800;
-        emailAction.hidden = !mailtoFits;
-        if (mailtoFits) emailAction.href = mailto;
-        handoffMessage.textContent = mailtoFits
-          ? `Cererea nu a fost trimisă încă. Apasă „Deschide aplicația de e-mail”, apoi apasă Trimite. Destinatar: ${ORDER_EMAIL}.`
-          : `Cererea nu a fost trimisă încă. Este prea lungă pentru un link e-mail sigur; descarc-o ca fișier .eml sau copiază detaliile și trimite-le la ${ORDER_EMAIL || 'adresa de contact a site-ului'}.`;
-        success.hidden = false;
-        success.focus();
+        isPreparing = true;
+        form.setAttribute('aria-busy', 'true');
+        submitButton.disabled = true;
+        submitButton.textContent = 'Se pregătește cererea…';
+
+        try {
+          await new Promise((resolve) => window.requestAnimationFrame(resolve));
+          const subject = `Cerere melodie personalizată — ${requestValues.person}`;
+          const body = [
+            'CERERE MELODIE PERSONALIZATĂ',
+            '',
+            `Nume: ${requestValues.name}`,
+            `E-mail: ${requestValues.email}`,
+            `Ocazie: ${requestValues.occasion}`,
+            `Pachet: ${requestValues.package}`,
+            `Pentru: ${requestValues.person}`,
+            `Stil: ${requestValues.style}`,
+            '',
+            'POVESTEA:',
+            requestValues.story,
+            '',
+            'DE EVITAT:',
+            requestValues.avoid,
+            '',
+            `Acord pentru portofoliu: ${requestValues.portfolio}`
+          ].join('\n');
+
+          const mailto = `mailto:${ORDER_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+          preparedRequest = { subject, body, mailto };
+          const mailtoFits = ORDER_EMAIL && mailto.length <= 1800;
+          emailAction.hidden = !mailtoFits;
+          if (mailtoFits) emailAction.href = mailto;
+          handoffMessage.textContent = mailtoFits
+            ? `Cererea nu a fost trimisă încă. Apasă „Deschide aplicația de e-mail”, apoi apasă Trimite. Destinatar: ${ORDER_EMAIL}.`
+            : `Cererea nu a fost trimisă încă. Este prea lungă pentru un link e-mail sigur; descarc-o ca fișier .eml sau copiază detaliile și trimite-le la ${ORDER_EMAIL || 'adresa de contact a site-ului'}.`;
+          success.hidden = false;
+          submitButton.textContent = 'Cererea este pregătită ✓';
+          window.requestAnimationFrame(() => {
+            success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            success.focus({ preventScroll: true });
+          });
+        } catch (error) {
+          console.error('Order form preparation failed:', error);
+          formErrorMessage.textContent = 'A apărut o problemă la pregătirea cererii. Te rugăm să încerci din nou.';
+          formError.hidden = false;
+          window.requestAnimationFrame(() => {
+            formError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            formError.focus({ preventScroll: true });
+          });
+        } finally {
+          isPreparing = false;
+          form.removeAttribute('aria-busy');
+          submitButton.disabled = false;
+          if (!preparedRequest) submitButton.textContent = submitButtonLabel;
+        }
       });
 
       function encodeBase64Utf8(text) {
