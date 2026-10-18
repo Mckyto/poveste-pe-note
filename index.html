@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Melodii personalizate create din povestea ta — un cadou unic pentru aniversări, cupluri și oameni dragi." />
+  <meta name="description" content="Melodii personalizate create din povestea ta — un cadou digital pentru oamenii dragi, cu pachete promoționale de la 49 lei." />
   <meta name="order-email" content="povestepenote.comenzi@gmail.com" />
   <title>Poveste pe Note — Melodii personalizate</title>
   <style>
@@ -134,8 +134,13 @@
     .price.popular { border: 2px solid var(--rose); transform: translateY(-10px); box-shadow: var(--shadow); }
     .ribbon { position: absolute; right: 20px; top: 18px; background: var(--rose); color: #fff; border-radius: 20px; padding: 5px 10px; font-size: 10px; font-weight: 800; text-transform: uppercase; }
     .price h3 { font: 400 27px Georgia, serif; margin: 4px 0; }
-    .amount { font-size: 42px; font-weight: 800; letter-spacing: -2px; }
-    .amount small { font-size: 14px; font-weight: 500; color: var(--muted); }
+    .price-label { display: inline-flex; align-self: flex-start; margin: 10px 0 4px; padding: 5px 10px; border-radius: 999px; background: var(--blush); color: #984158; font-size: 11px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
+    .amount { font-size: 44px; line-height: 1.1; font-weight: 800; letter-spacing: -2px; }
+    .amount small { font-size: 14px; font-weight: 500; letter-spacing: 0; color: var(--muted); }
+    .price-standard { margin: 5px 0 12px; color: var(--muted); font-size: 12px; }
+    .price-standard del { margin-left: 3px; text-decoration-thickness: 1px; }
+    .price-note { max-width: 760px; margin: 28px auto 0; color: var(--muted); font-size: 13px; text-align: center; }
+    .price-note strong { color: var(--ink); }
     .price ul { padding: 0; list-style: none; color: var(--muted); font-size: 14px; flex: 1; }
     .price li { padding: 8px 0; border-bottom: 1px solid #f3e9eb; }
     .price li::before { content: "✓"; color: var(--rose); font-weight: 800; margin-right: 9px; }
@@ -256,7 +261,7 @@
           <a class="btn primary" href="#comanda">Comandă o melodie →</a>
           <a class="btn secondary" href="#exemple">Ascultă exemple</a>
         </div>
-        <div class="micro">♡ Creată cu grijă &nbsp; • &nbsp; Livrare digitală &nbsp; • &nbsp; O revizie inclusă</div>
+        <div class="micro">♡ Creată cu grijă &nbsp; • &nbsp; Pachete promo de la 49 lei &nbsp; • &nbsp; Livrare digitală &nbsp; • &nbsp; O revizie inclusă</div>
       </div>
       <div class="record-card" aria-label="Copertă decorativă pentru o melodie personalizată">
         <div class="cover-copy">
@@ -318,28 +323,38 @@
     <section id="preturi" aria-labelledby="prices-title">
       <div class="wrap">
         <div class="section-head">
-          <span>Pachete</span>
-          <h2 id="prices-title">Alege cum vrei să sune povestea</h2>
-          <p>Detaliile și termenul de livrare se confirmă în scris înainte de începerea lucrului.</p>
+          <span>Pachete · prețuri promoționale</span>
+          <h2 id="prices-title">Alege pachetul potrivit pentru povestea voastră</h2>
+          <p>Prețurile promoționale sunt afișate în lei. Termenul și detaliile comenzii se confirmă în scris înainte de începerea lucrului.</p>
         </div>
         <div class="prices">
           <article class="price">
-            <h3>Mini</h3><div class="amount">79 <small>lei</small></div>
+            <h3>Mini</h3>
+            <span class="price-label">Preț promoțional</span>
+            <div class="amount">49 <small>lei</small></div>
+            <p class="price-standard">Preț standard: <del>79 lei</del></p>
             <ul><li>Melodie 1–2 minute</li><li>Versuri personalizate</li><li>Fișier MP3</li><li>O revizie minoră</li></ul>
-            <button class="btn secondary" type="button" data-package="mini">Aleg Mini</button>
+            <button class="btn secondary" type="button" data-package="mini">Aleg Mini · 49 lei</button>
           </article>
           <article class="price popular">
             <span class="ribbon">Cel mai ales</span>
-            <h3>Poveste</h3><div class="amount">149 <small>lei</small></div>
+            <h3>Poveste</h3>
+            <span class="price-label">Preț promoțional</span>
+            <div class="amount">89 <small>lei</small></div>
+            <p class="price-standard">Preț standard: <del>149 lei</del></p>
             <ul><li>Melodie 2–3 minute</li><li>Versuri detaliate</li><li>MP3 + copertă digitală</li><li>Două variante de refren</li><li>O revizie inclusă</li></ul>
-            <button class="btn primary" type="button" data-package="poveste">Aleg Poveste</button>
+            <button class="btn primary" type="button" data-package="poveste">Aleg Poveste · 89 lei</button>
           </article>
           <article class="price">
-            <h3>Moment</h3><div class="amount">249 <small>lei</small></div>
+            <h3>Moment</h3>
+            <span class="price-label">Preț promoțional</span>
+            <div class="amount">149 <small>lei</small></div>
+            <p class="price-standard">Preț standard: <del>249 lei</del></p>
             <ul><li>Tot din pachetul Poveste</li><li>Videoclip vertical cu versuri</li><li>Format pentru Reels/TikTok</li><li>Livrare prioritară</li></ul>
-            <button class="btn secondary" type="button" data-package="moment">Aleg Moment</button>
+            <button class="btn secondary" type="button" data-package="moment">Aleg Moment · 149 lei</button>
           </article>
         </div>
+        <p class="price-note"><strong>Fără plată pe site.</strong> Trimiterea formularului este o cerere, nu o comandă confirmată. Îți confirmăm în scris pachetul, suma finală, modalitatea de plată și termenul înainte de începerea lucrului.</p>
       </div>
     </section>
 
@@ -405,9 +420,9 @@
                 <label for="package">Pachet</label>
                 <select id="package" name="pachet" required>
                   <option value="">Alege pachetul</option>
-                  <option value="Mini — 79 lei" data-package-key="mini">Mini — 79 lei</option>
-                  <option value="Poveste — 149 lei" data-package-key="poveste">Poveste — 149 lei</option>
-                  <option value="Moment — 249 lei" data-package-key="moment">Moment — 249 lei</option>
+                  <option value="Mini — 49 lei (preț promoțional)" data-package-key="mini">Mini — 49 lei (preț promoțional)</option>
+                  <option value="Poveste — 89 lei (preț promoțional)" data-package-key="poveste">Poveste — 89 lei (preț promoțional)</option>
+                  <option value="Moment — 149 lei (preț promoțional)" data-package-key="moment">Moment — 149 lei (preț promoțional)</option>
                 </select>
               </div>
               <div class="field">
@@ -475,7 +490,7 @@
         <span class="eyebrow">Cum lucrăm</span>
         <h2 id="terms-title">Termeni și condiții</h2>
         <p>Trimiterea unei cereri nu reprezintă acceptarea automată a unei comenzi. Începem lucrul numai după confirmarea prin e-mail a pachetului, prețului, termenului de livrare și detaliilor de plată. Site-ul nu colectează plăți.</p>
-        <p>Conținutul pachetelor și prețurile sunt cele afișate pe această pagină la momentul confirmării. Numărul de revizii și materialele livrate sunt cele precizate în pachet; orice schimbare se stabilește în scris înainte de începerea producției.</p>
+        <p>Conținutul pachetelor și prețul aplicabil sunt cele confirmate în scris înainte de începerea producției. Prețurile promoționale și prețurile standard de referință sunt afișate pe această pagină; numărul de revizii și materialele livrate sunt cele precizate în pachet. Orice schimbare se stabilește în scris.</p>
         <p>Clientul confirmă că are dreptul să transmită informațiile incluse în comandă și că nu solicită folosirea sau imitarea neautorizată a vocii unei persoane. Utilizarea, livrarea și eventualele drepturi asupra materialelor finale se confirmă în scris, în conformitate cu legea aplicabilă.</p>
         <p>Acest rezumat descrie fluxul actual al paginii. Operatorul trebuie să completeze și să verifice condițiile comerciale, identitatea legală, termenele și politicile obligatorii pentru activitatea sa înainte de lansarea publică.</p>
       </div>
