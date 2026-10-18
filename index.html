@@ -348,27 +348,29 @@
         <div class="section-head">
           <span>Începe aici</span>
           <h2 id="order-title">Spune-ne povestea ta</h2>
-          <p>Completează formularul, iar la „Trimite cererea” se deschide aplicația ta de e-mail cu mesajul gata scris. Îl trimiți de acolo și îți răspundem personal pe aceeași adresă.</p>
+          <p>Completează formularul, iar la „Trimite cererea” pregătim mesajul către noi. Dacă aplicația de e-mail nu se deschide, îl poți trimite direct din Gmail sau Outlook, în browser, fără să configurezi nimic. Îți răspundem personal pe aceeași adresă.</p>
         </div>
         <div class="form-shell">
           <aside class="form-side">
             <h3>O melodie pe care n-o mai are nimeni.</h3>
             <p>Cu cât ne dai mai multe detalii sincere, cu atât piesa va fi mai personală.</p>
             <div class="promise">
-              <div><b>01</b><span>Cererea se deschide în aplicația ta de e-mail, gata completată; pagina nu salvează datele.</span></div>
+              <div><b>01</b><span>Cererea se deschide în aplicația ta de e-mail sau, dacă nu ai una, direct în Gmail ori Outlook; pagina nu salvează datele.</span></div>
               <div><b>02</b><span>Trimite e-mailul din aplicația ta; comanda începe numai după ce confirmăm detaliile în scris.</span></div>
               <div><b>03</b><span>Nu se procesează plăți pe site.</span></div>
             </div>
             <p class="contact-line">Ne poți scrie și direct:<br /><a class="contact-link" id="emailContact" href="mailto:povestepenote.comenzi@gmail.com">povestepenote.comenzi@gmail.com</a></p>
           </aside>
           <!--
-            Trimiterea simplă prin mailto: la apăsarea butonului, JavaScript compune un link
-            mailto: către adresa din meta-tagul "order-email" (subiect + corp formatat) și îl
-            deschide în aplicația de e-mail a vizitatorului, cu cererea completată. Fără
-            JavaScript, formularul se trimite tot prin aplicația de e-mail, folosind atributul
-            "action" (mailto:), iar câmpurile ajung ca text simplu în corpul mesajului.
-            Site-ul rămâne static, fără servicii externe: mesajul pleacă direct din aplicația
-            de e-mail a vizitatorului, iar confirmarea o dăm noi personal, la răspuns.
+            Trimiterea simplă la apăsarea butonului: JavaScript compune cererea (subiect +
+            corp formatat) și încearcă să deschidă aplicația de e-mail a vizitatorului prin
+            mailto:. Imediat după aceea, sub formular apar variantele Gmail și Outlook, care
+            deschid compunerea direct în browser, fără nicio aplicație configurată, plus
+            fișierul .eml și copierea detaliilor. Fără JavaScript, formularul se trimite tot
+            prin aplicația de e-mail, folosind atributul "action" (mailto:), iar câmpurile
+            ajung ca text simplu în corpul mesajului.
+            Site-ul rămâne static, fără servicii externe și fără chei secrete: mesajul pleacă
+            direct din aplicația vizitatorului, iar confirmarea o dăm noi personal, la răspuns.
           -->
           <form class="form" id="orderForm" action="mailto:povestepenote.comenzi@gmail.com" method="post" enctype="text/plain" novalidate>
             <div class="form-alert" id="formError" role="alert" aria-live="assertive" tabindex="-1" hidden>
@@ -376,7 +378,7 @@
               <p id="formErrorMessage">Completează câmpurile obligatorii și încearcă din nou.</p>
             </div>
             <div class="success" id="success" role="status" aria-live="polite" tabindex="-1" hidden>
-              <h3 id="successTitle">Ți-am deschis aplicația de e-mail.</h3>
+              <h3 id="successTitle">Cererea este gata de trimis.</h3>
               <p id="handoffMessage">Trimite mesajul din aplicația de e-mail.</p>
             </div>
             <div class="fields">
@@ -439,12 +441,14 @@
               <label><input id="portfolio" name="portofoliu" type="checkbox" value="Da" /> <span>Sunt de acord ca un fragment să fie folosit în portofoliu (opțional; refuzul nu afectează comanda).</span></label>
             </div>
             <button class="btn primary" type="submit">Trimite cererea →</button>
-            <p class="notice">Butonul deschide aplicația ta de e-mail cu cererea completată către adresa noastră. Verifică mesajul, apasă Trimite din aplicație și îți răspundem personal pe aceeași adresă.</p>
+            <p class="notice">Butonul încearcă să deschidă aplicația ta de e-mail cu cererea completată către adresa noastră. Dacă nu se deschide, imediat după trimitere ai variantele Gmail, Outlook, .eml sau copiere — toate cu datele deja completate.</p>
             <details class="manual-fallback" id="manualFallback">
-              <summary>Nu s-a deschis e-mailul? Trimite cererea manual</summary>
-              <p>Completează formularul corect și apasă „Trimite cererea”; butoanele de mai jos se activează cu detaliile tale. Le poți folosi oricând ca variantă de rezervă sau ca să păstrezi o copie: deschide aplicația de e-mail, descarcă fișierul .eml sau copiază textul și trimite-l la <span id="manualEmail">povestepenote.comenzi@gmail.com</span>.</p>
+              <summary>Nu s-a deschis e-mailul? Alege cum trimiți</summary>
+              <p>Completează formularul corect și apasă „Trimite cererea”; variantele de mai jos se activează cu detaliile tale. Gmail și Outlook se deschid direct în browser, cu mesajul completat, și merg fără nicio aplicație configurată pe dispozitiv. Poți la fel de bine să deschizi aplicația de e-mail, să descarci fișierul .eml sau să copiezi textul și să-l trimiți la <span id="manualEmail">povestepenote.comenzi@gmail.com</span>.</p>
               <div class="handoff-actions">
                 <a class="btn primary is-disabled" id="emailAction" aria-disabled="true">Deschide aplicația de e-mail</a>
+                <a class="btn secondary is-disabled" id="gmailAction" aria-disabled="true">Deschide în Gmail</a>
+                <a class="btn secondary is-disabled" id="outlookAction" aria-disabled="true">Deschide în Outlook</a>
                 <button class="btn secondary" id="downloadOrder" type="button" disabled>Descarcă o copie (.eml)</button>
                 <button class="btn secondary" id="copyOrder" type="button" disabled>Copiază detaliile</button>
               </div>
@@ -460,11 +464,11 @@
       <div class="wrap">
         <span class="eyebrow">Informații despre date</span>
         <h2 id="privacy-title">Confidențialitate</h2>
-        <p>Pagina nu folosește conturi, cookie-uri de analiză sau stocare locală. Când apeși „Trimite cererea”, datele completate (nume, e-mail, ocazie, pachet, povestea, ce vrei să evităm și opțiunile bifate) sunt puse într-un mesaj către adresa noastră de e-mail, care se deschide în aplicația ta de e-mail. Mesajul pleacă numai când îl trimiți tu din aplicație.</p>
+        <p>Pagina nu folosește conturi, cookie-uri de analiză sau stocare locală. Când apeși „Trimite cererea”, datele completate (nume, e-mail, ocazie, pachet, povestea, ce vrei să evităm și opțiunile bifate) sunt puse într-un mesaj către adresa noastră de e-mail, care se deschide în aplicația ta de e-mail sau, la cerere, direct în Gmail ori Outlook, în browser. Mesajul pleacă numai când îl trimiți tu.</p>
         <p>Prelucrăm datele pe baza consimțământului tău, exprimat prin bifarea acordului din formular, exclusiv pentru a-ți răspunde și pentru a realiza melodia. Nu include informații sensibile care nu sunt necesare pentru melodie. Acordul opțional pentru portofoliu poate fi refuzat fără să afecteze cererea.</p>
         <p>Mesajul pleacă din aplicația ta și trece prin furnizorul tău de e-mail, direct către adresa noastră, fără alte servicii intermediare. Noi îl păstrăm doar cât este necesar pentru cererea ta.</p>
         <p>O copie a cererii rămâne la tine: în aplicația de e-mail (mesaje trimise sau ciornă) sau în fișierul .eml descărcat, dacă folosești varianta manuală. Nu trimitem confirmări automate; dacă ai nevoie de detalii, ne scrii oricând și îți răspundem personal.</p>
-        <p>Dacă aplicația de e-mail nu se deschide (de exemplu, nu ai niciuna configurată pe dispozitiv), îți oferim variante de rezervă: poți descărca cererea ca fișier .eml, copia textul sau deschide din nou linkul mailto:. În toate cazurile, mesajul pleacă din aplicația ta de e-mail.</p>
+        <p>Dacă aplicația de e-mail nu se deschide (de exemplu, nu ai niciuna configurată pe dispozitiv), îți oferim variante de rezervă: poți deschide cererea direct în Gmail sau Outlook, în browser, poți descărca fișierul .eml, copia textul sau deschide din nou linkul mailto:. În toate cazurile, mesajul pleacă numai când îl trimiți tu, prin furnizorul tău de e-mail.</p>
         <p>Pentru întrebări despre o cerere trimisă sau pentru a solicita corectarea ori ștergerea ei, scrie la <a id="privacyEmail" href="mailto:povestepenote.comenzi@gmail.com">povestepenote.comenzi@gmail.com</a>. Înainte de publicare, operatorul trebuie să completeze aici identitatea legală și orice alte informații de contact cerute pentru activitatea sa.</p>
       </div>
     </section>
@@ -515,6 +519,13 @@
       // Peste această lungime, linkul mailto: devine riscant (unele sisteme îl trunchiază sau
       // nu îl deschid), iar vizitatorul este îndrumat către variantele manuale de rezervă.
       const MAILTO_LIMIT = 1800;
+
+      // Compunerea în browser (Gmail / Outlook) nu depinde de nicio aplicație configurată pe
+      // dispozitiv, dar linkurile au și ele o limită practică de lungime. Peste acest prag,
+      // variantele sigure rămân fișierul .eml și copierea detaliilor.
+      const WEBMAIL_LIMIT = 8000;
+      const GMAIL_COMPOSE_URL = 'https://mail.google.com/mail/?view=cm&fs=1';
+      const OUTLOOK_COMPOSE_URL = 'https://outlook.office.com/mail/deeplink/compose';
 
       const packageSelect = document.getElementById('package');
       document.querySelectorAll('[data-package]').forEach((button) => {
@@ -786,6 +797,8 @@
       const handoffMessage = document.getElementById('handoffMessage');
       const manualFallback = document.getElementById('manualFallback');
       const emailAction = document.getElementById('emailAction');
+      const gmailAction = document.getElementById('gmailAction');
+      const outlookAction = document.getElementById('outlookAction');
       const downloadButton = document.getElementById('downloadOrder');
       const copyButton = document.getElementById('copyOrder');
       const copyFallback = document.getElementById('copyFallback');
@@ -814,48 +827,67 @@
         });
       }
 
-      // Variantele de rezervă (mailto:, .eml, copiere) sunt active doar cu o cerere pregătită.
+      // Variantele de trimitere (mailto:, Gmail, Outlook, .eml, copiere) sunt active doar cu o
+      // cerere pregătită. Linkurile Gmail/Outlook se deschid într-o filă nouă, direct în browser.
+      function setLinkAvailability(link, href, available) {
+        if (available) {
+          link.href = href;
+          link.setAttribute('target', '_blank');
+          link.setAttribute('rel', 'noopener noreferrer');
+          link.classList.remove('is-disabled');
+          link.removeAttribute('aria-disabled');
+        } else {
+          link.removeAttribute('href');
+          link.removeAttribute('target');
+          link.removeAttribute('rel');
+          link.classList.add('is-disabled');
+          link.setAttribute('aria-disabled', 'true');
+        }
+      }
+
       function setFallbackAvailability(available) {
         downloadButton.disabled = !available;
         copyButton.disabled = !available;
-        const mailtoFits = available && Boolean(ORDER_EMAIL) && preparedRequest.mailto.length <= MAILTO_LIMIT;
-        emailAction.hidden = !ORDER_EMAIL || (available && !mailtoFits);
-        if (mailtoFits) {
-          emailAction.href = preparedRequest.mailto;
-          emailAction.classList.remove('is-disabled');
-          emailAction.removeAttribute('aria-disabled');
-        } else {
-          emailAction.removeAttribute('href');
-          emailAction.classList.add('is-disabled');
-          emailAction.setAttribute('aria-disabled', 'true');
-        }
-        return mailtoFits;
+        const hasRequest = available && Boolean(preparedRequest);
+        const mailtoFits = hasRequest && Boolean(ORDER_EMAIL) && preparedRequest.mailto.length <= MAILTO_LIMIT;
+        emailAction.hidden = !ORDER_EMAIL || (hasRequest && !mailtoFits);
+        setLinkAvailability(emailAction, mailtoFits ? preparedRequest.mailto : '', mailtoFits);
+        const webmailFits = hasRequest && Boolean(ORDER_EMAIL) && preparedRequest.webmailLength <= WEBMAIL_LIMIT;
+        gmailAction.hidden = !ORDER_EMAIL;
+        outlookAction.hidden = !ORDER_EMAIL;
+        setLinkAvailability(gmailAction, webmailFits ? preparedRequest.gmail : '', webmailFits);
+        setLinkAvailability(outlookAction, webmailFits ? preparedRequest.outlook : '', webmailFits);
+        return { mailtoFits, webmailFits };
       }
 
-      // Starea de după apăsarea butonului: cererea este pregătită și, de regulă, aplicația de
-      // e-mail s-a deschis cu mesajul completat. Confirmarea reală o dăm noi la răspuns.
-      function showHandoffState(visitorEmail, variant) {
+      // Starea de după apăsarea butonului: cererea este pregătită. Nu putem ști dacă aplicația
+      // de e-mail s-a deschis, așa că nu promitem asta; îndrumăm vizitatorul către varianta
+      // care merge sigur, iar blocul cu toate opțiunile rămâne deschis.
+      function showHandoffState(visitorEmail, variant, limits) {
         const address = visitorEmail || 'adresa ta de e-mail';
         const destination = ORDER_EMAIL || 'adresa noastră de contact';
         success.classList.remove('warn', 'pending');
-        if (variant === 'opened') {
-          success.classList.add('pending');
-          successTitle.textContent = 'Ți-am deschis aplicația de e-mail';
-          handoffMessage.textContent = `Cererea este gata scrisă către ${destination}. Verifică mesajul, apasă Trimite din aplicația de e-mail și îți răspundem personal pe ${address}. Dacă aplicația nu s-a deschis, folosește variantele de mai jos.`;
-          manualFallback.open = false;
-        } else if (variant === 'unconfigured') {
+        manualFallback.open = true;
+        if (variant === 'unconfigured') {
           success.classList.add('warn');
           successTitle.textContent = 'Trimite cererea manual';
-          handoffMessage.textContent = `Adresa de contact nu este configurată pe această pagină, așa că aplicația de e-mail nu s-a deschis. Trimite cererea manual, cu una dintre variantele de mai jos, la ${destination}.`;
-          manualFallback.open = true;
+          handoffMessage.textContent = `Adresa de contact nu este configurată pe această pagină, așa că aplicația de e-mail nu s-a deschis. Alege mai jos o variantă de trimitere, cu detaliile deja completate, către ${destination}.`;
         } else {
-          success.classList.add('warn');
-          successTitle.textContent = 'Verifică aplicația de e-mail';
-          handoffMessage.textContent = `Am încercat să deschidem aplicația de e-mail cu cererea către ${destination}, dar mesajul este lung și s-ar putea să nu se deschidă corect pe toate dispozitivele. Dacă aplicația nu s-a deschis sau textul pare tăiat, folosește variantele de mai jos și trimite cererea la ${destination}.`;
-          manualFallback.open = true;
+          success.classList.add(limits.mailtoFits || limits.webmailFits ? 'pending' : 'warn');
+          successTitle.textContent = 'Cererea este gata de trimis';
+          const mailtoHint = limits.mailtoFits
+            ? 'Dacă s-a deschis aplicația de e-mail, verifică mesajul și apasă Trimite.'
+            : 'Linkul către aplicația de e-mail este prea lung, așa că s-ar putea să nu se deschidă complet.';
+          const webmailHint = limits.webmailFits
+            ? 'Dacă nu, deschide cererea în Gmail sau Outlook: merge direct în browser, fără nicio aplicație configurată pe dispozitiv.'
+            : 'Mesajul este prea lung pentru compunerea în browser, așa că cel mai sigur este să descarci fișierul .eml sau să copiezi detaliile.';
+          handoffMessage.textContent = `Cererea este pregătită către ${destination}. ${mailtoHint} ${webmailHint} Toate variantele sunt mai jos, cu datele tale deja completate; îți răspundem personal pe ${address}.`;
         }
         copyFallback.hidden = true;
         copyFeedback.textContent = '';
+        if (variant !== 'unconfigured' && !limits.webmailFits) {
+          copyFeedback.textContent = 'Mesajul este prea lung pentru un link de compunere în browser. Descarcă fișierul .eml sau copiază detaliile.';
+        }
         success.hidden = false;
       }
 
@@ -873,7 +905,7 @@
       function resetSubmissionState() {
         success.hidden = true;
         success.classList.remove('warn', 'pending');
-        successTitle.textContent = 'Ți-am deschis aplicația de e-mail.';
+        successTitle.textContent = 'Cererea este gata de trimis.';
         manualFallback.open = false;
         copyFallback.hidden = true;
         copyFeedback.textContent = '';
@@ -935,6 +967,18 @@
         link.remove();
       }
 
+      // Linkuri de compunere în browser. Folosim %20 pentru spații (encodeURIComponent), nu
+      // "+", pentru că Outlook înlocuiește uneori "+" cu "++" când utilizatorul nu e conectat.
+      function buildWebmailLinks(subject, body) {
+        const to = encodeURIComponent(ORDER_EMAIL);
+        const encodedSubject = encodeURIComponent(subject);
+        const encodedBody = encodeURIComponent(body);
+        return {
+          gmail: `${GMAIL_COMPOSE_URL}&to=${to}&su=${encodedSubject}&body=${encodedBody}`,
+          outlook: `${OUTLOOK_COMPOSE_URL}?to=${to}&subject=${encodedSubject}&body=${encodedBody}`
+        };
+      }
+
       form.addEventListener('input', handleFormEdit);
       form.addEventListener('change', handleFormEdit);
       form.addEventListener('submit', (event) => {
@@ -981,21 +1025,30 @@
           `Acord pentru portofoliu: ${requestValues.portfolio}`
         ].join('\n');
         const mailto = `mailto:${ORDER_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-        preparedRequest = { subject, body, mailto, email: requestValues.email };
-        const mailtoFits = setFallbackAvailability(true);
+        const webmail = buildWebmailLinks(subject, body);
+        preparedRequest = {
+          subject,
+          body,
+          mailto,
+          email: requestValues.email,
+          gmail: webmail.gmail,
+          outlook: webmail.outlook,
+          webmailLength: Math.max(webmail.gmail.length, webmail.outlook.length)
+        };
+        const limits = setFallbackAvailability(true);
 
         if (!ORDER_EMAIL) {
-          showHandoffState(requestValues.email, 'unconfigured');
+          showHandoffState(requestValues.email, 'unconfigured', limits);
           focusPanel(success);
           return;
         }
 
-        // Aplicația de e-mail se deschide cu cererea completată către ORDER_EMAIL; trimiterea
-        // propriu-zisă o face vizitatorul din aplicație. Dacă mesajul este atât de lung încât
-        // linkul mailto: devine riscant, îl deschidem oricum și îndrumăm către variantele de
-        // rezervă (.eml, copiere), active imediat după aceea.
+        // Încercăm să deschidem aplicația de e-mail cu cererea completată către ORDER_EMAIL;
+        // trimiterea propriu-zisă o face vizitatorul. Nu putem detecta dacă aplicația s-a
+        // deschis, așa că blocul cu Gmail, Outlook, .eml și copiere rămâne deschis, cu toate
+        // variantele active imediat după apăsare.
         openMailClient(preparedRequest);
-        showHandoffState(requestValues.email, mailtoFits ? 'opened' : 'tooLong');
+        showHandoffState(requestValues.email, 'prepared', limits);
         focusPanel(success);
       });
 
@@ -1050,6 +1103,15 @@
           copyFeedback.textContent = 'Copierea automată nu este permisă aici. Textul este selectat; '
             + 'copiază-l manual și trimite-l la ' + ORDER_EMAIL + '.';
         }
+      });
+
+      gmailAction.addEventListener('click', () => {
+        if (!preparedRequest || gmailAction.classList.contains('is-disabled')) return;
+        copyFeedback.textContent = 'Gmail se deschide într-o filă nouă. Verifică mesajul și apasă Trimite.';
+      });
+      outlookAction.addEventListener('click', () => {
+        if (!preparedRequest || outlookAction.classList.contains('is-disabled')) return;
+        copyFeedback.textContent = 'Outlook se deschide într-o filă nouă. Verifică mesajul și apasă Trimite.';
       });
 
     })();
