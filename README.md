@@ -10,7 +10,7 @@ Apoi deschide `http://localhost:8000`.
 
 ## Pachete și prețuri promoționale
 
-Prețurile afișate în pagina publică sunt: Mini — **49 lei** (standard 79 lei), Poveste — **89 lei** (standard 149 lei) și Moment — **149 lei** (standard 249 lei). Valorile trebuie să rămână sincronizate între cardurile de preț, lista din formular și mesajul de comandă. Butonul fiecărui pachet selectează opțiunea cu prețul promoțional.
+Prețurile afișate în pagina publică sunt promoționale: Mini — **49 lei**, Poveste — **89 lei** și Moment — **149 lei**. Valorile trebuie să rămână sincronizate între cardurile de preț, lista din formular și mesajul de comandă. Butonul fiecărui pachet selectează opțiunea cu prețul promoțional.
 
 Pagina colectează cereri prin e-mail, nu plăți. Înainte de orice plată sau începerea lucrului, confirmăm în scris pachetul, suma finală, modalitatea de plată și termenul de livrare. Oferta nu afișează un termen-limită; nu adăuga un cronometru sau o dată de expirare fără confirmarea perioadei reale.
 
@@ -49,7 +49,7 @@ Linkul Gmail este construit cu `encodeURIComponent` (spațiile devin `%20`) și 
 3. Trimite mesajul din Gmail și confirmă că ajunge în inboxul din `order-email` (verifică și folderul Spam la prima trimitere). Răspunde clientului de test ca să confirmi fluxul complet.
 4. Completează o poveste lungă (spre 4000 de caractere): dacă linkul Gmail depășește `WEBMAIL_LIMIT`, butonul Gmail rămâne dezactivat și mesajul îndrumă spre `.eml` sau copiere.
 5. Trimite formularul gol: nimic nu pleacă, apar mesajele de validare, iar focusul ajunge pe primul câmp greșit.
-6. Alege fiecare pachet din card și din lista formularului: Gmail/.eml trebuie să conțină prețul promoțional corect (49, 89 sau 149 lei), nu prețul standard.
+6. Alege fiecare pachet din card și din lista formularului: Gmail/.eml trebuie să conțină prețul promoțional corect (49, 89 sau 149 lei).
 
 Pentru verificări automate există o suită jsdom (rulată în afara repo-ului, ex. `/tmp/jstest`, cu `npm i jsdom`) care simulează trimiterea formularului: validare, deschiderea linkului Gmail cu parametrii corecți, blocul de rezervă deschis după fiecare trimitere, mesajele lungi, meta-tagul gol și resetarea la editare.
 
@@ -69,6 +69,6 @@ Playerul folosește automat fișierul MP3 dacă există; dacă lipsește, redă 
 - Trimite o cerere de test de pe un telefon și de pe un calculator, ca să vezi cum se deschide Gmail pe fiecare dispozitiv; verifică și `.eml` și copierea ca alternative.
 - Verifică textele despre date din nota de confidențialitate: acum cererea pleacă din contul Gmail al vizitatorului, fără servicii intermediare și fără confirmări automate.
 - Completează identitatea legală a operatorului și verifică politicile afișate, condițiile comerciale, livrarea, anularea și drepturile asupra materialelor.
-- Confirmă perioada reală a promoției, prețurile standard de referință, dacă sumele includ taxele aplicabile și condițiile de plată/livrare; aceste informații nu pot fi presupuse de cod.
+- Confirmă perioada reală a promoției, dacă sumele includ taxele aplicabile și condițiile de plată/livrare; aceste informații nu pot fi presupuse de cod.
 - Reverifică în carduri, formular și e-mail că prețurile promoționale și conținutul pachetelor sunt sincronizate.
 - Publică pagina prin HTTPS.
