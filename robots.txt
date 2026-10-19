@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://poveste-pe-note.pages.dev/sitemap.xml
