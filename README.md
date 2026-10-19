@@ -57,18 +57,59 @@ Pentru verificări automate există o suită jsdom (rulată în afara repo-ului,
 
 Nu există un formular de upload public pentru vizitatori. Adaugă fișierele audio în repository, în `assets/audio/`, cu numele de mai jos:
 
-- `locul-meu-e-langa-tine.mp3` — cardul Romantic pop
-- `mama-primul-meu-acasa.mp3` — cardul Baladă emoționantă
-- `legenda-din-gasca.mp3` — cardul Pop vesel
+- `locul-meu-e-langa-tine.mp3` — cardul Romantic pop, piesa „The Beautiful Life”
+- `mama-primul-meu-acasa.mp3` — cardul Baladă emoționantă, piesa „Nights You Stayed Awake”
+- `legenda-din-gasca.mp3` — cardul Pop vesel, piesa „The Legend They Whisper”
 
 Playerul folosește automat fișierul MP3 dacă există; dacă lipsește, redă fragmentul sintetic de demonstrație. Pentru alte nume sau căi, schimbă proprietatea `audioFile` a piesei corespunzătoare din obiectul `tracks` din `index.html`. MP3 este formatul recomandat; păstrează fișierele comprimate și adaugă numai materiale pe care ai dreptul să le publici. Fișierele puse în repository vor fi publice împreună cu site-ul.
+
+### Formatul publicat al mostrelor
+
+Mostrele din repository sunt **fragmente de 60 de secunde, 128 kbps, 44,1 kHz stereo** (sub 1 MB fiecare), cu fade-out la final și metadate ID3 complete (titlu, artist „Poveste pe Note”, album „Mostre demonstrative”, gen). Titlul din tag-ul `TIT2` trebuie să coincidă cu titlul afișat pe card și cu proprietatea `song` din obiectul `tracks`, pentru ca mesajele playerului și metadatele fișierului să rămână sincronizate.
+
+Dacă înlocuiești o piesă cu o înregistrare nouă (de obicei mult mai mare), recomprim-o înainte de commit:
+
+```bash
+pip install miniaudio lameenc mutagen numpy
+python3 tools/optimize_samples.py
+```
+
+Scriptul taie fiecare fișier la 60 s, îl re-encodează la 128 kbps și rescrie tag-urile ID3. Piesele sursă, în versiune completă, păstrează-le în afara repository-ului: tot ce pui în `assets/audio/` devine public.
+
+## SEO, favicon și partajare
+
+- **Favicon și pictograme:** `assets/img/favicon.svg` (vectorial, preferat de browsere), `favicon-32.png`, `icon-192.png`, `apple-touch-icon.png` și `favicon.png` (512 px). Toate sunt generate din aceeași marcă — discul de vinil cu nota muzicală în paleta site-ului.
+- **Imagine de partajare:** `assets/img/og-cover.png` (1200×630), referită de `og:image` și `twitter:image`. Linkurile trimise pe WhatsApp, Facebook sau Messenger afișează titlul, descrierea și această imagine.
+- **Date structurate:** blocul `application/ld+json` din `<head>` descrie serviciul și cele trei oferte (49/89/149 RON). Dacă schimbi prețurile, sincronizează și acest bloc.
+- **`robots.txt` și `sitemap.xml`** la rădăcina repository-ului, cu URL-ul canonical `https://poveste-pe-note.pages.dev/`.
+
+Dacă schimbi domeniul, actualizează în același commit: `link rel="canonical"`, `og:url`, `og:image`, `twitter:image`, textul domeniului din `og-cover.png` (regenerează imaginea), `robots.txt` și `sitemap.xml`.
+
+## Publicare
+
+Repository-ul are două trasee de publicare, ambele prin HTTPS:
+
+- **Cloudflare Pages** — `https://poveste-pe-note.pages.dev/`, adresa canonicală folosită în `og:url`, sitemap și imaginea de partajare. Verifică în panoul Cloudflare că proiectul este legat de ramura `main` și că directorul de publicare este rădăcina repository-ului (fără comandă de build).
+- **GitHub Pages** — `https://mckyto.github.io/poveste-pe-note/`, oglindă automată a aceleiași ramuri `main`. Este utilă ca rezervă, dar motoarele de căutare trebuie să indexeze adresa canonicală.
+
+Orice îmbinare în `main` republică ambele trasee; nu există pas manual de deploy.
+
+## Verificări automate
+
+Pe lângă suita jsdom pentru formular, `smoke`-ul de mai jos verifică head-ul SEO, textele mostrelor, titlurile pieselor în mesajele playerului, sincronizarea pachetelor și validarea formularului:
+
+```bash
+npm i jsdom   # într-un director din afara repo-ului, ex. /tmp/jstest
+node smoke.js # încarcă index.html în jsdom și rulează verificările
+```
 
 ## Înainte de publicarea comercială
 
 - Confirmă că inboxul din `order-email` există și este monitorizat, apoi parcurge pașii de test de pe pagina publicată.
 - Trimite o cerere de test de pe un telefon și de pe un calculator, ca să vezi cum se deschide Gmail pe fiecare dispozitiv; verifică și `.eml` și copierea ca alternative.
 - Verifică textele despre date din nota de confidențialitate: acum cererea pleacă din contul Gmail al vizitatorului, fără servicii intermediare și fără confirmări automate.
-- Completează identitatea legală a operatorului și verifică politicile afișate, condițiile comerciale, livrarea, anularea și drepturile asupra materialelor.
+- Operatorul este afișat ca „Poveste pe Note”, cu e-mailul de contact. Dacă activezi printr-o formă juridică (PFA, SRL etc.), completează în secțiunile Confidențialitate și Termeni denumirea legală, CUI/CIF și sediul, cerute de lege pentru comerț și prelucrarea datelor.
 - Confirmă perioada reală a promoției, dacă sumele includ taxele aplicabile și condițiile de plată/livrare; aceste informații nu pot fi presupuse de cod.
-- Reverifică în carduri, formular și e-mail că prețurile promoționale și conținutul pachetelor sunt sincronizate.
-- Publică pagina prin HTTPS.
+- Reverifică în carduri, formular, e-mail și blocul JSON-LD că prețurile promoționale și conținutul pachetelor sunt sincronizate.
+- Confirmă că `https://poveste-pe-note.pages.dev/` răspunde și că GitHub Pages afișează același conținut; ambele trebuie să servească prin HTTPS.
+- Ascultă fiecare mostră publicată: fragmentul de 60 s trebuie să înceapă și să se termine curat, fără tăieturi bruște.
